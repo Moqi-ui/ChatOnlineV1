@@ -1,0 +1,13 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{B242A8C6-42C7-CB38-1C3F-11BBDBCEF406}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "ChatOnline_WFY",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
