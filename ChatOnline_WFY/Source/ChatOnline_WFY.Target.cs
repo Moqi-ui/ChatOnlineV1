@@ -8,7 +8,7 @@ public class ChatOnline_WFYTarget : TargetRules
 	public ChatOnline_WFYTarget(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Game;
-		DefaultBuildSettings = BuildSettingsVersion.V2;
+		//DefaultBuildSettings = BuildSettingsVersion.V2;
 		ExtraModuleNames.Add("ChatOnline_WFY");
 	}
 }

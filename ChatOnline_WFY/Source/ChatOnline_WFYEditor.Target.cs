@@ -8,7 +8,7 @@ public class ChatOnline_WFYEditorTarget : TargetRules
 	public ChatOnline_WFYEditorTarget(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V2;
+		//DefaultBuildSettings = BuildSettingsVersion.V2;
 		ExtraModuleNames.Add("ChatOnline_WFY");
 	}
 }
