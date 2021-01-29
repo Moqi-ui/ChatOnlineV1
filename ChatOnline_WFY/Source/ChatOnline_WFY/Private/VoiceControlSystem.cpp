@@ -9,6 +9,8 @@
 #include <vector>
 #include <wchar.h>
 #include <AudioDeviceManager.h>
+#include "Kismet/GameplayStatics.h"
+#include "Engine/Engine.h"
 
 using namespace std;
 
@@ -101,11 +103,12 @@ void UVoiceControlSystem::onUnInitGME() {
 
 void UVoiceControlSystem::onEnterRoom() {
 	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.0f, FColor::Yellow, TEXT("onEnterRoom"));
-	std::string roomID = TCHAR_TO_UTF8(m_Widget->editRoomID->GetText().ToString().operator*());
-	std::string roomType = TCHAR_TO_UTF8(m_Widget->editRoomType->GetText().ToString().operator*());
-	int nRoomType = atoi(roomType.c_str());
+	FString RoomIDStr = "202101";
+	std::string roomID = TCHAR_TO_UTF8(*RoomIDStr);
+	//std::string roomType = TCHAR_TO_UTF8(m_Widget->editRoomType->GetText().ToString().operator*());
+	//int nRoomType = atoi(roomType.c_str());
 
-	EnterRoom(roomID, (ITMG_ROOM_TYPE)nRoomType);
+	EnterRoom(roomID, (ITMG_ROOM_TYPE)0);
 }
 
 void UVoiceControlSystem::onExitRoom() {
@@ -124,14 +127,14 @@ void UVoiceControlSystem::onCheckSpeaker(bool isChecked) {
 }
 
 void UVoiceControlSystem::SetPositionInfo(FString positionInfo) {
-	m_Widget->textCamera->SetText(FText::FromString(*positionInfo));
+	//m_Widget->textCamera->SetText(FText::FromString(*positionInfo));
 }
 int UVoiceControlSystem::GetRange() {
 
 	int nRange = 0;
 	if (m_Widget != nullptr)
 	{
-		nRange = atoi(TCHAR_TO_UTF8(m_Widget->editRange->GetText().ToString().operator*()));
+		//nRange = atoi(TCHAR_TO_UTF8(m_Widget->editRange->GetText().ToString().operator*()));
 	}
 	return nRange;
 }
@@ -139,26 +142,26 @@ int UVoiceControlSystem::GetRange() {
 void UVoiceControlSystem::SetTips(std::string tips) {
 	if (m_Widget != nullptr) {
 		FString tempTips = FString(UTF8_TO_TCHAR(tips.c_str()));
-		m_Widget->textTips->SetText(FText::FromString(tempTips));
+		//m_Widget->textTips->SetText(FText::FromString(tempTips));
 	}
 }
 
 void UVoiceControlSystem::pttPrintBusyInfo() {
-	FString temp = m_Widget->textPttInfo->GetText().ToString();
+	//FString temp = m_Widget->textPttInfo->GetText().ToString();
 	if (m_pttState == PttState_Recording) {
-		m_Widget->textPttInfo->SetText(FText::FromString(temp + "\nwarning: recording!!!"));
+		//m_Widget->textPttInfo->SetText(FText::FromString(temp + "\nwarning: recording!!!"));
 	}
 	else if (m_pttState == PttState_Playing) {
-		m_Widget->textPttInfo->SetText(FText::FromString(temp + "\nwarning: playing!!!"));
+		//m_Widget->textPttInfo->SetText(FText::FromString(temp + "\nwarning: playing!!!"));
 	}
 	else if (m_pttState == PttState_Uploading) {
-		m_Widget->textPttInfo->SetText(FText::FromString(temp + "\nwarning: uploading!!!"));
+		//m_Widget->textPttInfo->SetText(FText::FromString(temp + "\nwarning: uploading!!!"));
 	}
 	else if (m_pttState == PttState_Downloading) {
-		m_Widget->textPttInfo->SetText(FText::FromString(temp + "\nwarning: downloading!!!"));
+		//m_Widget->textPttInfo->SetText(FText::FromString(temp + "\nwarning: downloading!!!"));
 	}
 	else if (m_pttState == PttState_ToTexting) {
-		m_Widget->textPttInfo->SetText(FText::FromString(temp + "\nwarning: totexting!!!"));
+		//m_Widget->textPttInfo->SetText(FText::FromString(temp + "\nwarning: totexting!!!"));
 	}
 }
 
@@ -168,7 +171,7 @@ void UVoiceControlSystem::onStreamRecordPress()
 	if (m_pttState == PttState_None) {
 		m_pttState = PttState_Recording;
 		m_isRecordHover = true;
-		m_Widget->textPttInfo->SetText(FText::FromString("Stream: recording..."));
+		//m_Widget->textPttInfo->SetText(FText::FromString("Stream: recording..."));
 		m_filePath = "";
 
 		char buffer[256] = { 0 };
@@ -206,13 +209,13 @@ void UVoiceControlSystem::onStreamRecordRelease() {
 #if PLATFORM_ANDROID || PLATFORM_IOS || PLATFORM_WINDOWS || PLATFORM_MAC
 	if (m_pttState == PttState_Recording) {
 		if (m_isRecordHover) {
-			m_Widget->textPttInfo->SetText(FText::FromString("Stream: release..."));
+			//m_Widget->textPttInfo->SetText(FText::FromString("Stream: release..."));
 			ITMGContextGetInstance()->GetPTT()->StopRecording();
 		}
 		else {
 			ITMGContextGetInstance()->GetPTT()->CancelRecording();
-			m_Widget->textPttInfo->SetText(FText::FromString("info: recording canceled.")); \
-				m_pttState = PttState_None;
+			//m_Widget->textPttInfo->SetText(FText::FromString("info: recording canceled."));
+			m_pttState = PttState_None;
 		}
 	}
 #endif
@@ -224,8 +227,8 @@ void UVoiceControlSystem::onPttRecordPress() {
 	if (m_pttState == PttState_None) {
 		m_pttState = PttState_Recording;
 		m_isRecordHover = true;
-		m_Widget->textPttInfo->SetText(FText::FromString("info: recording..."));
-		m_Widget->textRecord->SetText(FText::FromString("Recording"));
+		//m_Widget->textPttInfo->SetText(FText::FromString("info: recording..."));
+		//m_Widget->textRecord->SetText(FText::FromString("Recording"));
 		m_filePath = "";
 		char buffer[256] = { 0 };
 		snprintf(buffer, sizeof(buffer), "%sunreal_ptt_local.file", getFilePath().c_str());
@@ -244,8 +247,8 @@ void UVoiceControlSystem::onPttRecordRelease() {
 		}
 		else {
 			ITMGContextGetInstance()->GetPTT()->CancelRecording();
-			m_Widget->textPttInfo->SetText(FText::FromString("info: recording canceled."));
-			m_Widget->textRecord->SetText(FText::FromString("Record"));
+			//m_Widget->textPttInfo->SetText(FText::FromString("info: recording canceled."));
+		//	m_Widget->textRecord->SetText(FText::FromString("Record"));
 			m_pttState = PttState_None;
 		}
 	}
@@ -278,13 +281,13 @@ void UVoiceControlSystem::onPttPlay() {
 #if PLATFORM_ANDROID || PLATFORM_IOS || PLATFORM_WINDOWS || PLATFORM_MAC
 	if (m_pttState == PttState_None) {
 		if (m_filePath == "") {
-			FString temp = m_Widget->textPttInfo->GetText().ToString();
-			m_Widget->textPttInfo->SetText(FText::FromString(temp + "\nerror: local path is empty!!!"));
+			//FString temp = m_Widget->textPttInfo->GetText().ToString();
+			//m_Widget->textPttInfo->SetText(FText::FromString(temp + "\nerror: local path is empty!!!"));
 			return;
 		}
 		m_pttState = PttState_Playing;
-		m_Widget->textPttInfo->SetText(FText::FromString("info: playing..."));
-		m_Widget->textPlay->SetText(FText::FromString("Stop"));
+		//m_Widget->textPttInfo->SetText(FText::FromString("info: playing..."));
+		//m_Widget->textPlay->SetText(FText::FromString("Stop"));
 		ITMGContextGetInstance()->GetPTT()->PlayRecordedFile(m_filePath.c_str());
 	}
 	else if (m_pttState == PttState_Playing) {
@@ -299,12 +302,12 @@ void UVoiceControlSystem::onPttUpload() {
 #if PLATFORM_ANDROID || PLATFORM_IOS || PLATFORM_WINDOWS || PLATFORM_MAC
 	if (m_pttState == PttState_None) {
 		if (m_filePath == "") {
-			FString temp = m_Widget->textPttInfo->GetText().ToString();
-			m_Widget->textPttInfo->SetText(FText::FromString(temp + "\nerror: local path is empty!!!"));
+			//FString temp = m_Widget->textPttInfo->GetText().ToString();
+			//m_Widget->textPttInfo->SetText(FText::FromString(temp + "\nerror: local path is empty!!!"));
 			return;
 		}
 		m_pttState = PttState_Uploading;
-		m_Widget->textPttInfo->SetText(FText::FromString("info: uploading..."));
+		//m_Widget->textPttInfo->SetText(FText::FromString("info: uploading..."));
 
 		m_fileUrl = "";
 		ITMGContextGetInstance()->GetPTT()->UploadRecordedFile(m_filePath.c_str());
@@ -320,12 +323,12 @@ void UVoiceControlSystem::onPttDownload() {
 
 	if (m_pttState == PttState_None) {
 		if (m_fileUrl == "") {
-			FString temp = m_Widget->textPttInfo->GetText().ToString();
-			m_Widget->textPttInfo->SetText(FText::FromString(temp + "\nerror: url is empty!!!"));
+			//FString temp = m_Widget->textPttInfo->GetText().ToString();
+			//m_Widget->textPttInfo->SetText(FText::FromString(temp + "\nerror: url is empty!!!"));
 			return;
 		}
 		m_pttState = PttState_Downloading;
-		m_Widget->textPttInfo->SetText(FText::FromString("info: downloading..."));
+		//m_Widget->textPttInfo->SetText(FText::FromString("info: downloading..."));
 		m_filePath = "";
 		char buffer[256] = { 0 };
 		snprintf(buffer, sizeof(buffer), "%sunreal_ptt_download.file", getFilePath().c_str());
@@ -341,12 +344,12 @@ void UVoiceControlSystem::onPtt2Text() {
 #if PLATFORM_ANDROID || PLATFORM_IOS || PLATFORM_WINDOWS || PLATFORM_MAC
 	if (m_pttState == PttState_None) {
 		if (m_fileUrl == "") {
-			FString temp = m_Widget->textPttInfo->GetText().ToString();
-			m_Widget->textPttInfo->SetText(FText::FromString(temp + "\nerror: url is empty!!!"));
+			//FString temp = m_Widget->textPttInfo->GetText().ToString();
+			//m_Widget->textPttInfo->SetText(FText::FromString(temp + "\nerror: url is empty!!!"));
 			return;
 		}
 		m_pttState = PttState_ToTexting;
-		m_Widget->textPttInfo->SetText(FText::FromString("info: totexting..."));
+		//m_Widget->textPttInfo->SetText(FText::FromString("info: totexting..."));
 
 		ITMGContextGetInstance()->GetPTT()->SpeechToText(m_fileUrl.c_str());
 	}
@@ -394,7 +397,7 @@ void UVoiceControlSystem::onEditTeamIDChange(const FText& Text)
 void UVoiceControlSystem::onCheckTips(bool isChecked) {
 	m_isEnableTips = isChecked;
 	if (!m_isEnableTips) {
-		m_Widget->textTips->SetText(FText::FromString(""));
+		//m_Widget->textTips->SetText(FText::FromString(""));
 	}
 
 	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.0f, FColor::Yellow, TEXT("onCheckTips"));
@@ -416,20 +419,20 @@ void UVoiceControlSystem::onCheckRangeAudioModeChange(bool isChecked) {
 }
 
 void UVoiceControlSystem::onChangeRoomType() {
-	std::string roomType = TCHAR_TO_UTF8(m_Widget->editRoomType->GetText().ToString().operator*());
-	int nRoomType = atoi(roomType.c_str());
-	ITMGContextGetInstance()->GetRoom()->ChangeRoomType((ITMG_ROOM_TYPE)nRoomType);
+	//std::string roomType = TCHAR_TO_UTF8(m_Widget->editRoomType->GetText().ToString().operator*());
+	//int nRoomType = atoi(roomType.c_str());
+	//ITMGContextGetInstance()->GetRoom()->ChangeRoomType((ITMG_ROOM_TYPE)nRoomType);
 
-	FString msg = FString::Printf(TEXT("onChangeRoomType nRoomType=%d"), nRoomType);
-	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.0f, FColor::Yellow, *msg);
+	//FString msg = FString::Printf(TEXT("onChangeRoomType nRoomType=%d"), nRoomType);
+	//GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.0f, FColor::Yellow, *msg);
 }
 
 void UVoiceControlSystem::onEnterRoomCompleted(int32 result, FString errInfo) {
 	if (result == 0) {
-		m_Widget->checkBoxMic->SetIsChecked(false);
-		m_Widget->checkBoxSpeaker->SetIsChecked(false);
-		m_Widget->checkBoxSpatializer->SetIsChecked(false);
-		m_Widget->checkBoxVoiceChange->SetIsChecked(false);
+		//m_Widget->checkBoxMic->SetIsChecked(false);
+	//	m_Widget->checkBoxSpeaker->SetIsChecked(false);
+		//m_Widget->checkBoxSpatializer->SetIsChecked(false);
+	//	m_Widget->checkBoxVoiceChange->SetIsChecked(false);
 		GEngine->AddOnScreenDebugMessage(INDEX_NONE, 20.0f, FColor::Yellow, TEXT("OnEvent ENTER_ROOM succ"));
 	}
 }
@@ -438,31 +441,31 @@ void UVoiceControlSystem::onPttRecordFileCompleted(int32 result, FString filePat
 	m_filePath = TCHAR_TO_UTF8(filePath.operator*());
 	FString msg = FString::Printf(TEXT("info: recording completed.\nreslut=%d\nfilepath=%ls\nduarion=%.2f\nfilesize=%.2fKB"), result, filePath.operator*(), duration / 1000.0f, filesize / 1024.0f);
 
-	m_Widget->textPttInfo->SetText(FText::FromString(*msg));
-	m_Widget->textRecord->SetText(FText::FromString("Record"));
+	//m_Widget->textPttInfo->SetText(FText::FromString(*msg));
+	//m_Widget->textRecord->SetText(FText::FromString("Record"));
 	m_pttState = PttState_None;
 }
 void UVoiceControlSystem::onPttPlayFileCompleted(int32 result, FString filePath) {
 	FString msg = FString::Printf(TEXT("info: playing completed.\nreslut=%d\nfilepath=%ls"), result, filePath.operator*());
-	m_Widget->textPttInfo->SetText(FText::FromString(*msg));
-	m_Widget->textPlay->SetText(FText::FromString("Play"));
+	//m_Widget->textPttInfo->SetText(FText::FromString(*msg));
+	//m_Widget->textPlay->SetText(FText::FromString("Play"));
 	m_pttState = PttState_None;
 }
 void UVoiceControlSystem::onPttUploadFileCompleted(int32 result, FString filePath, FString fileID) {
 	m_fileUrl = TCHAR_TO_UTF8(fileID.operator*());
 	FString msg = FString::Printf(TEXT("info: uploading completed.\nreslut=%d\nfilepath=%ls\nfileid=%ls"), result, filePath.operator*(), fileID.operator*());
-	m_Widget->textPttInfo->SetText(FText::FromString(*msg));
+	//m_Widget->textPttInfo->SetText(FText::FromString(*msg));
 	m_pttState = PttState_None;
 }
 void UVoiceControlSystem::onPttDownloadFileCompleted(int32 result, FString filePath, FString fileID) {
 	m_filePath = TCHAR_TO_UTF8(filePath.operator*());
 	FString msg = FString::Printf(TEXT("info: downloading completed.\nreslut=%d\nfilepath=%ls\nfileid=%ls"), result, filePath.operator*(), fileID.operator*());
-	m_Widget->textPttInfo->SetText(FText::FromString(*msg));
+	//m_Widget->textPttInfo->SetText(FText::FromString(*msg));
 	m_pttState = PttState_None;
 }
 void UVoiceControlSystem::onPttSpeech2TextCompleted(int32 result, FString fileID, FString text) {
 	FString debugText = FString::Printf(TEXT("info: totexting completed.\nreslut=%d\ntext=%ls"), result, *text);
-	m_Widget->textPttInfo->SetText(FText::FromString(debugText));
+	//m_Widget->textPttInfo->SetText(FText::FromString(debugText));
 	m_pttState = PttState_None;
 }
 
@@ -472,7 +475,7 @@ void UVoiceControlSystem::onPttStreamRecognitionCompleted(int32 result, FString 
 	m_fileUrl = TCHAR_TO_UTF8(fileID.operator*());
 
 	FString debugText = FString::Printf(TEXT("info: stream completed.\nreslut=%d\ntext=%ls\nfilePath=%ls\nfileID=%ls"), result, *text, *filePath, *fileID);
-	m_Widget->textPttInfo->SetText(FText::FromString(debugText));
+	//m_Widget->textPttInfo->SetText(FText::FromString(debugText));
 
 
 	m_pttState = PttState_None;
@@ -484,7 +487,7 @@ void UVoiceControlSystem::onPttStreamRecognitionisRunning(int32 result, FString 
 	m_fileUrl = TCHAR_TO_UTF8(fileID.operator*());
 
 	FString debugText = FString::Printf(TEXT("info: stream runnig.\nreslut=%d\ntext=%ls\nfilePath=%ls\nfileID=%ls"), result, *text, *filePath, *fileID);
-	m_Widget->textPttInfo->SetText(FText::FromString(debugText));
+//	m_Widget->textPttInfo->SetText(FText::FromString(debugText));
 
 
 	// m_pttState = PttState_None;

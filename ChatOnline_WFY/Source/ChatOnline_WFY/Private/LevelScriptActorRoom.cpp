@@ -6,6 +6,11 @@
 #include "Runtime/Core/Public/Misc/Paths.h"
 #include "Runtime/Engine/Classes/Engine/EngineTypes.h"
 #include "Runtime/Engine/Classes/Engine/TextRenderActor.h"
+#include "Kismet/GameplayStatics.h"
+#include "LocalTimestampDirectoryVisitor.h"
+#include "Engine/Engine.h"
+#include "PlatformFilemanager.h"
+#include "FileHelper.h"
 
 ALevelScriptActorRoom::ALevelScriptActorRoom()
 {

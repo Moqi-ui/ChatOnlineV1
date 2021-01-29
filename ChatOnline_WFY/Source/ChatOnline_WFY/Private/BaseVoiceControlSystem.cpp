@@ -6,6 +6,11 @@
 #include "LevelScriptActorRoom.h"
 #include "Engine/TextRenderActor.h"
 #include "UserConfig.h"
+#include "Components/TextRenderComponent.h"
+#include "Engine/Engine.h"
+#include "JsonReader.h"
+#include "JsonSerializer.h"
+#include "JsonObject.h"
 
 int scaleSize = 8;
 

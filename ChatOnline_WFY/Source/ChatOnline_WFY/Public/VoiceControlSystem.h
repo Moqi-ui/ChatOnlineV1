@@ -17,6 +17,8 @@
 
 #include "CoreMinimal.h"
 #include "BaseVoiceControlSystem.h"
+#include "UserWidget.h"
+#include "Sound/SoundWave.h"
 #include "VoiceControlSystem.generated.h"
 
 
@@ -35,22 +37,22 @@ public:
 	UFUNCTION()
 		void onChangeDemo();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Category = "GME")
 		void onInitGME();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Category = "GME")
 		void onUnInitGME();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Category = "GME")
 		void onEnterRoom();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Category = "GME")
 		void onExitRoom();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Category = "GME")
 		void onCheckMic(bool isChecked);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Category = "GME")
 		void onCheckSpeaker(bool isChecked);
 
 	UFUNCTION()
@@ -128,7 +130,8 @@ protected:
 	void onPttStreamRecognitionisRunning(int32 result, FString filePath, FString fileID, FString text);
 
 private:
-	UUEDemoUserWidget* m_Widget;
+	//UUEDemoUserWidget* m_Widget;
+	UUserWidget* m_Widget;
 	bool m_isEnable3DInTeam;
 	void pttPrintBusyInfo();
 	PttState m_pttState;
