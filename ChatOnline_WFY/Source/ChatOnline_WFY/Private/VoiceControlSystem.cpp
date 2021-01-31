@@ -57,3 +57,9 @@ void UVoiceControlSystem::onCheckSpeaker(bool isChecked)
 	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.0f, FColor::Yellow, TEXT("onCheckSpeaker"));
 	ITMGContextGetInstance()->GetAudioCtrl()->EnableSpeaker(isChecked);
 }
+
+void UVoiceControlSystem::EarToReturn(bool icChecked)
+{
+	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.0f, FColor::Yellow, TEXT("onCheckEarToReturn"));
+	ITMGContextGetInstance()->GetAudioCtrl()->EnableLoopBack(icChecked);
+}

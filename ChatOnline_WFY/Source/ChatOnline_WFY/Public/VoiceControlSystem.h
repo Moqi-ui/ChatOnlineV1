@@ -43,5 +43,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "GME")
 	void onCheckSpeaker(bool isChecked);
+
+	UFUNCTION(BLueprintCallable, Category = "GME")
+		void EarToReturn(bool icChecked);
 	
 };
