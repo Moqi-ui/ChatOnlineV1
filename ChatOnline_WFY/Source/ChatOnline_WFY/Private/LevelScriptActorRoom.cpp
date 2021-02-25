@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Engine/Engine.h"
 #include "tmg_sdk.h"
+#include "VoiceControlSystem.h"
 
 ALevelScriptActorRoom::ALevelScriptActorRoom()
 {
@@ -17,6 +18,21 @@ void ALevelScriptActorRoom::BeginPlay() {
 	//UGameplayStatics::GetPlayerController(GetWorld(), 0)->bShowMouseCursor = true;
 
 	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.0f, FColor::Yellow, TEXT("BeginPlay"));
+
+	myVoiceControlSystem = NewObject<UVoiceControlSystem>();
+
+	if (myVoiceControlSystem)
+	{
+		myVoiceControlSystem->OnInitGME();
+
+		myVoiceControlSystem->OnEnterRoom("202101");
+
+		//myVoiceControlSystem->onCheckMic(true);
+
+		//myVoiceControlSystem->onCheckSpeaker(true);
+
+		GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.0f, FColor::Yellow, TEXT("myVoiceControlSystem"));
+	}
 }
 
 void ALevelScriptActorRoom::Tick(float DeltaSeconds) {

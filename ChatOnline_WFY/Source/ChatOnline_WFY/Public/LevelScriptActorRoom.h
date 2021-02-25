@@ -6,6 +6,7 @@
 #include "Engine/LevelScriptActor.h"
 #include "LevelScriptActorRoom.generated.h"
 
+class UVoiceControlSystem;
 /**
  * 
  */
@@ -19,5 +20,9 @@ public:
 	virtual void BeginPlay();
 	virtual void Tick(float DeltaSeconds);
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason);
+
+private:
+
+	UVoiceControlSystem* myVoiceControlSystem;
 
 };
