@@ -6,6 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include "WFY_MainPage.generated.h"
 
+class UVoiceControlSystem;
+
 /**
  * 
  */
@@ -21,6 +23,10 @@ public:
 	UWFY_MainPage* GetInitLoadPage();
 
 public:
+
+	/**Get or create VoiceController		by Mr.cao 20210226*/
+	UFUNCTION(BlueprintCallable, Category = "GME_Voice")
+	UVoiceControlSystem* GetOrCreateVoiceController();
 
 	/**³¢ÊÔµÇÂ½ÓÎÏ·(TryLoginTheGame)			by Mr.cao 20210223*/
 	UFUNCTION(BlueprintCallable, Category = "LoginPage")
@@ -45,5 +51,8 @@ private:
 	UWFY_MainPage* RegisterPage;
 
 
+private:
+
+	UVoiceControlSystem* VoiceController;
 	
 };

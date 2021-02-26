@@ -23,9 +23,9 @@ void ALevelScriptActorRoom::BeginPlay() {
 
 	if (myVoiceControlSystem)
 	{
-		myVoiceControlSystem->OnInitGME();
+		//myVoiceControlSystem->OnInitGME();
 
-		myVoiceControlSystem->OnEnterRoom("202101");
+		//myVoiceControlSystem->OnEnterRoom("202101");
 
 		//myVoiceControlSystem->onCheckMic(true);
 
@@ -35,7 +35,8 @@ void ALevelScriptActorRoom::BeginPlay() {
 	}
 }
 
-void ALevelScriptActorRoom::Tick(float DeltaSeconds) {
+void ALevelScriptActorRoom::Tick(float DeltaSeconds) 
+{
 	Super::Tick(DeltaSeconds);
 
 	ITMGContextGetInstance()->Poll();

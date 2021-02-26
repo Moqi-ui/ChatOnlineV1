@@ -34,7 +34,7 @@ void UVoiceControlSystem::OnInitGME()
 
 void UVoiceControlSystem::OnEnterRoom(FString roomId)
 {
-	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.0f, FColor::Yellow, TEXT("onEnterRoom"));
+	//GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.0f, FColor::Yellow, TEXT("onEnterRoom"));
 	std::string strRoomID = TCHAR_TO_UTF8(*roomId);
 
 	EnterRoom(strRoomID, (ITMG_ROOM_TYPE)0);
