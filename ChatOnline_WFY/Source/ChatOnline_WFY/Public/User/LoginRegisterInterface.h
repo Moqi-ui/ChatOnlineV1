@@ -15,6 +15,8 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "UserLandManager.h"
+#include "Userwidget.h"
 #include "LoginRegisterInterface.generated.h"
 
 /**
@@ -33,8 +35,22 @@ private:
 
 public:
 
-	UFUNCTION(BlueprintCallable, Category = "ULoginRegister")
+	UFUNCTION(BlueprintCallable, Category = "UIEvent")
 		void Print_F(FString InputStr);
 
+	UFUNCTION(BlueprintCallable, Category = "UIEvent")
+		void init();
+
+	/**显示或创建一个控件								by imrcao 20210422
+	*@param							SelfWidget		自身控件
+	*@param							MyUserWidget	指定要创建的控件
+	*/
+	UFUNCTION(BlueprintCallable, Category = "UIEvent")
+		void ShowOrCreateOneWidget(UWidget* SelfWidget, TSubclassOf<UUserWidget> MyUserWidget);
+
+private:
+
+
+	FUserLandManager* userLandManger;
 
 };

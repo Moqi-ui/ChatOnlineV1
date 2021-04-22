@@ -1,6 +1,12 @@
 #include "UserDataType.h"
 
-FUserDataType::FUserDataType()
+FUserInfoData::FUserInfoData()
+{
+
+}
+
+FUserInfoData::FUserInfoData(int userID_, FString userName_, FString userPhoneNumber_, FString userPower_, FString userAvatar_, FDateTime userRegisterTime_)
+	:userID(userID_), userName(userName_), userPhoneNumber(userPhoneNumber_), userPower(userPower_), userAvatar(userAvatar_), userRegisterTime(userRegisterTime_)
 {
 
 }

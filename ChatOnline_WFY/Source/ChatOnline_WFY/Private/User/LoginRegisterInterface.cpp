@@ -15,3 +15,13 @@ void ULoginRegisterInterface::Print_F(FString InputStr)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, InputStr);
 }
+
+void ULoginRegisterInterface::init()
+{
+	userLandManger = FUserLandManager::Get();
+}
+
+void ULoginRegisterInterface::ShowOrCreateOneWidget(UWidget* SelfWidget, TSubclassOf<UUserWidget> MyUserWidget)
+{
+
+}

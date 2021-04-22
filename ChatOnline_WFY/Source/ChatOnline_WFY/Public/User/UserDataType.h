@@ -20,12 +20,35 @@
 #include "UserDataType.generated.h"
 
 USTRUCT(BlueprintType)
-struct CHATONLINE_WFY_API FUserDataType
+struct CHATONLINE_WFY_API FUserInfoData
 {
 	GENERATED_BODY()
 
 	UPROPERTY(BlueprintReadOnly, Category = "UserInfo")
 		int userID;
 
-	FUserDataType();
+	UPROPERTY(BlueprintReadOnly, Category = "UserInfo")
+		FString userName;
+
+	UPROPERTY(BlueprintReadOnly, Category = "UserInfo")
+		FString userPhoneNumber;
+
+	UPROPERTY(BlueprintReadOnly, Category = "UserInfo")
+		FString userPower;
+
+	UPROPERTY(BlueprintReadOnly, Category = "UserInfo")
+		FString userAvatar;
+
+	UPROPERTY(BlueprintReadOnly, Category = "UserInfo")
+		FDateTime userRegisterTime;
+
+	FUserInfoData();
+
+	FUserInfoData(int userID_, FString userName_, FString userPhoneNumber_, FString userPower_, FString userAvatar_, FDateTime userRegisterTime_);
+
+	bool IsValue()const
+	{
+		return userID >= 1 && userName.Len() >= 2 && userPower.Len() >= 2;
+	}
+
 };

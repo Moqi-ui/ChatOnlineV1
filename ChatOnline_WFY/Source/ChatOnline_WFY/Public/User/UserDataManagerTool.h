@@ -18,6 +18,8 @@
 
 class FUserDataManagerTool
 {
+public:
+
 	FUserDataManagerTool();
 
 	~FUserDataManagerTool();
