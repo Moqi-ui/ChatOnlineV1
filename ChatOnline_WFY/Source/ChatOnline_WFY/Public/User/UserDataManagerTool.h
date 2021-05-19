@@ -15,6 +15,7 @@
 
 #pragma once
 #include "CoreMinimal.h"
+#include "Core/SimpleMysqlLink.h"
 
 class FUserDataManagerTool
 {
@@ -23,5 +24,15 @@ public:
 	FUserDataManagerTool();
 
 	~FUserDataManagerTool();
+
+	void setSqlLink(TSharedPtr<FSimpleMysqlLink> Link_);
+
+public:
+
+	bool QueryLinkResultTest1();
+
+private:
+
+	TSharedPtr<FSimpleMysqlLink> Link;
 
 };

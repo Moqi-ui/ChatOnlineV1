@@ -141,6 +141,6 @@ private:
 	//登录客户端的唯一ID  by imrcao 20210422
 	FString workID;
 
-	FUserDataManagerTool userDataManagerTool;
+	FUserDataManagerTool userDataManagerTool;// = FUserDataManagerTool();
 
 };
