@@ -10,6 +10,10 @@ FUserLandManager::FUserLandManager()
 {
 	//FGuid UE4中的一个功能，能够生成一个唯一的字符。
 	workID = FGuid::NewGuid().ToString();
+
+
+	UE_LOG(LogTemp, Log, TEXT("FUserLandManager()"));
+
 }
 
 FUserLandManager::~FUserLandManager()

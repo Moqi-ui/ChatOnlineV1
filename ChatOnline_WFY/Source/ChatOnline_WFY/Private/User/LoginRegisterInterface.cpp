@@ -8,7 +8,11 @@ void ULoginRegisterInterface::PostInitProperties()
 {
 	Super::PostInitProperties();
 
+	Link = MakeShareable(new FSimpleMysqlLink(InUser, InHost, InPawd, InDB, InPort, Unix_Socket, InClientFlag));
 
+	//Print_F("PostInitProperties");
+	//GLog->Log();
+	UE_LOG(LogTemp, Log, TEXT("PostInitProperties"));
 }
 
 void ULoginRegisterInterface::Print_F(FString InputStr)
@@ -19,9 +23,19 @@ void ULoginRegisterInterface::Print_F(FString InputStr)
 void ULoginRegisterInterface::init()
 {
 	userLandManger = FUserLandManager::Get();
+
+	userLandManger->GetUserDataManagerTool().setSqlLink(Link);
 }
 
 void ULoginRegisterInterface::ShowOrCreateOneWidget(UWidget* SelfWidget, TSubclassOf<UUserWidget> MyUserWidget)
 {
 
+}
+
+bool ULoginRegisterInterface::QueryLinkResultTest(const FString& SQL, TArray<FSimpleMysqlResult>& Results, FString& ErrMesg, EMysqlQuerySaveType SaveType, const FSimpleMysqlDebugResult& Debug)
+{
+
+	Link->QueryLinkResult(SQL, Results, ErrMesg, SaveType, Debug);
+
+	return false;
 }

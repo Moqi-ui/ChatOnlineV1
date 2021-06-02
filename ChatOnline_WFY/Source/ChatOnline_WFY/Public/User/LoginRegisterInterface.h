@@ -17,6 +17,7 @@
 #include "UObject/NoExportTypes.h"
 #include "UserLandManager.h"
 #include "Userwidget.h"
+//#include "Core/SimpleMysqlLink.h"
 #include "LoginRegisterInterface.generated.h"
 
 /**
@@ -48,9 +49,37 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "UIEvent")
 		void ShowOrCreateOneWidget(UWidget* SelfWidget, TSubclassOf<UUserWidget> MyUserWidget);
 
+
+public:
+
+	//测试函数
+
+	UFUNCTION(BlueprintCallable, Category = "UISQLtest")
+		bool QueryLinkResultTest(const FString& SQL, TArray<FSimpleMysqlResult>& Results, FString& ErrMesg, EMysqlQuerySaveType SaveType, const FSimpleMysqlDebugResult& Debug);
+
 private:
 
 
 	FUserLandManager* userLandManger;
+
+	TSharedPtr<FSimpleMysqlLink> Link;
+
+	/******************************数据库相关信息***************************/
+
+	FString InUser = "root";
+
+	FString InHost = "81.70.169.65";
+
+	FString InPawd = "Mrcao";
+
+	FString InDB = "wfy_database";
+
+	uint32  InPort = 3306;
+
+	FString Unix_Socket = TEXT("\0");
+
+	TArray<ESimpleClientFlags> InClientFlag = TArray<ESimpleClientFlags>();
+
+	/******************************数据库相关信息***************************/
 
 };
