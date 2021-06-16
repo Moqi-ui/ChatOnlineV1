@@ -19,8 +19,13 @@
 #include "UObject/NoExportTypes.h"
 #include "UserDataType.generated.h"
 
+
+/**一个用户的基本数据 对应数据库“users”表
+ *
+ */
+
 USTRUCT(BlueprintType)
-struct CHATONLINE_WFY_API FUserInfoData
+struct CHATONLINE_WFY_API FDMUserData
 {
 	GENERATED_BODY()
 
@@ -42,9 +47,9 @@ struct CHATONLINE_WFY_API FUserInfoData
 	UPROPERTY(BlueprintReadOnly, Category = "UserInfo")
 		FDateTime userRegisterTime;
 
-	FUserInfoData();
+	FDMUserData();
 
-	FUserInfoData(int userID_, FString userName_, FString userPhoneNumber_, FString userPower_, FString userAvatar_, FDateTime userRegisterTime_);
+	FDMUserData(int userID_, FString userName_, FString userPhoneNumber_, FString userPower_, FString userAvatar_, FDateTime userRegisterTime_);
 
 	bool IsValue()const
 	{

@@ -77,6 +77,11 @@ FUserLandManager* FUserLandManager::Get()
 
 bool FUserLandManager::TryLandWithPassword(FString identity_Type, FString identifier, FString userInputPassword, FString& err)
 {
+
+
+
+
+
 	return false;
 }
 
@@ -95,8 +100,18 @@ bool FUserLandManager::TrySendOneVerificationCode(FString identity_Type, FString
 	return false;
 }
 
-bool FUserLandManager::TryRegisterOneUser(FUserInfoData userInfoData, FString password, FString verificationCode, FString& err)
+bool FUserLandManager::TryRegisterOneUser(FDMUserData userInfoData, FString password, FString verificationCode, FString& err)
 {
+	FString EncryptionData;
+
+	//Êý¾Ý¼ÓÃÜ
+	DataEncryption(password, EncryptionData);
+
+	//return UserDateManage.RegisterNewUser(userData, EncryptionData, workID);
+
+
+
+
 	return false;
 }
 
@@ -167,5 +182,10 @@ bool FUserLandManager::UserLand(int userID)
 
 void FUserLandManager::DataEncryption(FString inputData, FString& outputData)
 {
+	FSHAHash data;
+
+	FSHA1::HashBuffer(inputData.GetCharArray().GetData(), inputData.GetCharArray().Num(), data.Hash);
+
+	outputData = data.ToString();
 
 }

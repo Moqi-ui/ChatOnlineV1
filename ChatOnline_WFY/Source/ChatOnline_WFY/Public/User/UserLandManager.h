@@ -16,7 +16,6 @@
 #pragma once
 #include "CoreMinimal.h"
 #include "Tickable.h"
-#include "UserDataType.h"
 #include "UserDataManagerTool.h"
 
 class CHATONLINE_WFY_API FUserLandManager:public FTickableGameObject
@@ -66,7 +65,7 @@ public:
 		return bIsUserLand;
 	}
 
-	FUserInfoData GetCurrentUserData() const
+	FDMUserData GetCurrentUserData() const
 	{
 		return CurrentUserInfoData;
 	}
@@ -79,7 +78,7 @@ public:
 
 	bool TrySendOneVerificationCode(FString identity_Type, FString ienditifier, FString& err);
 
-	bool TryRegisterOneUser(FUserInfoData userInfoData, FString password, FString verificationCode, FString& err);
+	bool TryRegisterOneUser(FDMUserData userInfoData, FString password, FString verificationCode, FString& err);
 
 	void Logout();
 
@@ -132,7 +131,7 @@ private:
 
 	bool bIsUserLand = false;
 
-	FUserInfoData CurrentUserInfoData;
+	FDMUserData CurrentUserInfoData;
 
 	FDateTime lastLandTime;
 

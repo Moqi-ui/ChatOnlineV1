@@ -16,6 +16,7 @@
 #pragma once
 #include "CoreMinimal.h"
 #include "Core/SimpleMysqlLink.h"
+#include "UserDataType.h"
 
 class FUserDataManagerTool
 {
@@ -29,10 +30,22 @@ public:
 
 public:
 
-	bool QueryLinkResultTest1();
+	/**注册一个新的用户，将用户数据存入数据库					by moqi 20190926
+	*@param						OneUserDate					一个用户的基本数据
+	*@param						Password					用户密码
+	*@param						workID						当前登陆的客户端ID
+	*/
+	bool RegisterNewUser(FDMUserData OneUserData, FString Password, FString workID);
+
+
+
+
+
+
+	//bool QueryLinkResultTest1();
 
 private:
 
-	TSharedPtr<FSimpleMysqlLink> Link;
+	TSharedPtr<FSimpleMysqlLink> pDataBaseLinkName;
 
 };
