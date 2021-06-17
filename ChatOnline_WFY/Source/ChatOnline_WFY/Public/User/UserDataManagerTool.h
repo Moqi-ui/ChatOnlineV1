@@ -18,15 +18,15 @@
 #include "Core/SimpleMysqlLink.h"
 #include "UserDataType.h"
 
-class FUserDataManagerTool
+class FUserDateManageTool
 {
 public:
 
-	FUserDataManagerTool();
+	FUserDateManageTool();
 
-	~FUserDataManagerTool();
+	~FUserDateManageTool();
 
-	void setSqlLink(TSharedPtr<FSimpleMysqlLink> Link_);
+	void setSqlLink(TSharedRef<FSimpleMysqlLink> Link_);
 
 public:
 
@@ -116,5 +116,14 @@ public:
 private:
 
 	TSharedPtr<FSimpleMysqlLink> pDataBaseLinkName;
+
+	//用户相关表名称
+
+	FString users_TableName = "users";
+
+	FString user_land_TableName = "user_land";
+
+	FString user_auths_TableName = "user_auths";
+
 
 };

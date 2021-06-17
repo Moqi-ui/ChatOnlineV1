@@ -4,6 +4,10 @@
 #include "LoginRegisterInterface.h"
 #include "Engine.h"
 
+#include <string>
+
+#define LOCTEXT_NAMESPACE "ULoginRegisterInterface"
+
 void ULoginRegisterInterface::PostInitProperties()
 {
 	Super::PostInitProperties();
@@ -22,9 +26,9 @@ void ULoginRegisterInterface::Print_F(FString InputStr)
 
 void ULoginRegisterInterface::init()
 {
-	userLandManger = FUserLandManager::Get();
+	UserLandManager = FUserLandManager::Get();
 
-	userLandManger->GetUserDataManagerTool().setSqlLink(Link);
+	UserLandManager->GetUserDataManagerTool().setSqlLink(Link.ToSharedRef());
 }
 
 void ULoginRegisterInterface::ShowOrCreateOneWidget(UWidget* SelfWidget, TSubclassOf<UUserWidget> MyUserWidget)
@@ -79,12 +83,59 @@ void ULoginRegisterInterface::SetForgetPasswordColor()
 
 bool ULoginRegisterInterface::OnClickCodeLoginButton()
 {
+
+
+
+	//UserLandManager->TryRegisterOneUser();
+
+
 	return false;
 }
 
 bool ULoginRegisterInterface::OnClickRegisterButton()
 {
+	Print_F("OnClickRegisterButton");
+
+	if (!UserLandManager)
+	{
+		return false;
+	}
+
+	FString Err1;
+	FDMUserData OneUserData1;
+	UserLandManager->RegisterUser(OneUserData1, "123456", "0000", Err1);
+
 	return false;
+
+	if (UserLandManager->VerificationCodeValidity(UserInputNumber, UserInputVerification))
+	{
+		FDMUserData OneUserData;
+		OneUserData.userPhoneNumber = UserInputNumber;
+		OneUserData.userName = UserInputName;
+
+		FString Err;
+		if (UserLandManager->RegisterUser(OneUserData, UserInputPassword, UserInputVerification, Err))
+		{
+			//注册成功
+			PromptWordsState = ESlateVisibility::Visible;
+			PromptWords = LOCTEXT("RegisterSuccessful", "注册成功,正在跳转到登录页面...");
+			return true;
+		}
+		else
+		{
+			PromptWordsState = ESlateVisibility::Visible;
+
+			PromptWords = LOCTEXT("UnknowFaile", " 注册失败请稍后重试 ");
+
+			return false;
+		}
+	}
+	else
+	{
+		PromptWordsState = ESlateVisibility::Visible;
+		PromptWords = LOCTEXT("VerificationCodeNotRight", "验证码无效，请重新输入");
+		return false;
+	}
 }
 
 void ULoginRegisterInterface::OnModifyPasswordWidget()
@@ -163,3 +214,4 @@ bool ULoginRegisterInterface::InsertTableDatasTest()
 
 	return false;
 }
+#undef LOCTEXT_NAMESPACE

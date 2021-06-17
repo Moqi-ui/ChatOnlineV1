@@ -2,103 +2,138 @@
 
 
 
-FUserDataManagerTool::FUserDataManagerTool()
+FUserDateManageTool::FUserDateManageTool()
 {
-	//UE_LOG(LogTemp, Log, TEXT("2222FUserDataManagerTool()"));
+	//UE_LOG(LogTemp, Log, TEXT("2222FUserDateManageTool()"));
 }
 
-FUserDataManagerTool::~FUserDataManagerTool()
+FUserDateManageTool::~FUserDateManageTool()
 {
 
 }
 
-void FUserDataManagerTool::setSqlLink(TSharedPtr<FSimpleMysqlLink> Link_)
+void FUserDateManageTool::setSqlLink(TSharedRef<FSimpleMysqlLink> Link_)
 {
 	pDataBaseLinkName = Link_;
 
 	if (pDataBaseLinkName)
 	{
 		UE_LOG(LogTemp, Log, TEXT("setSqlLink"));
+
+		TMap<FString, FString> InsertDatas;
+
+		FSimpleMysqlQueryParameters QueryParameters;
+
+		FString ErrorMsg;
+
+		FDateTime nowtime = FDateTime::Now();
+
+		InsertDatas.Add("nickname", "Mrcaol");
+		InsertDatas.Add("power", "normal");
+		InsertDatas.Add("avatar", "NULL");
+		InsertDatas.Add("register", nowtime.ToString());
+
+		pDataBaseLinkName->InsertTableData(users_TableName, InsertDatas, QueryParameters, ErrorMsg);
 	}
 }
 
-bool FUserDataManagerTool::RegisterNewUser(FDMUserData OneUserData, FString Password, FString workID)
+bool FUserDateManageTool::RegisterNewUser(FDMUserData OneUserData, FString Password, FString workID)
 {
 	if (!pDataBaseLinkName)
 	{
 		return false;
 	}
 
+	TMap<FString, FString> InsertDatas;
 
-	//pDataBaseLinkName->InsertTableData();
+	FSimpleMysqlQueryParameters QueryParameters;
+
+	FString ErrorMsg;
+
+	FDateTime nowtime = FDateTime::Now();
+
+	InsertDatas.Add("nickname", OneUserData.userName);
+	InsertDatas.Add("power", "normal");
+	InsertDatas.Add("avatar", "NULL");
+	InsertDatas.Add("register", nowtime.ToString());
+
+	if (pDataBaseLinkName->InsertTableData(users_TableName, InsertDatas, QueryParameters, ErrorMsg))
+	{
+
+
+
+
+		return true;
+	}
+	
 
 
 
 	return false;
 }
 
-bool FUserDataManagerTool::JudgeOnePhoneNumberExist(FString PhoneNumber)
+bool FUserDateManageTool::JudgeOnePhoneNumberExist(FString PhoneNumber)
 {
 
 	return false;
 }
 
-bool FUserDataManagerTool::GetDataBasePassword(FString PhoneNumber, FString& Password)
+bool FUserDateManageTool::GetDataBasePassword(FString PhoneNumber, FString& Password)
 {
 	return false;
 }
 
-int FUserDataManagerTool::GetUserLoggingStatus(FString PhoneNumber)
+int FUserDateManageTool::GetUserLoggingStatus(FString PhoneNumber)
 {
 
 	return 0;
 }
 
-bool FUserDataManagerTool::UpdateUserLoginStatus(FString workID, FString Identity, int& userID)
+bool FUserDateManageTool::UpdateUserLoginStatus(FString workID, FString Identity, int& userID)
 {
 	return false;
 
 }
 
-bool FUserDataManagerTool::GetOneUserBaseData(FDMUserData& OneUserData, int userid)
+bool FUserDateManageTool::GetOneUserBaseData(FDMUserData& OneUserData, int userid)
 {
 	return false;
 }
 
-bool FUserDataManagerTool::UpdateUserLogoutStatus(int userID)
+bool FUserDateManageTool::UpdateUserLogoutStatus(int userID)
 {
 	return false;
 }
 
-bool FUserDataManagerTool::UpdateUserLoginTIme(int userID)
+bool FUserDateManageTool::UpdateUserLoginTIme(int userID)
 {
 	return false;
 
 }
 
-bool FUserDataManagerTool::UpdateUserLoginTIme(FString Identify, int64& Time)
+bool FUserDateManageTool::UpdateUserLoginTIme(FString Identify, int64& Time)
 {
 	return false;
 }
 
-FString FUserDataManagerTool::GetCurrentUserPassword(int userID)
+FString FUserDateManageTool::GetCurrentUserPassword(int userID)
 {
 	FString ww = "d";
 
 	return ww;
 }
 
-bool FUserDataManagerTool::ModifyCurrentUserPassword(int userID, FString NewPassword)
+bool FUserDateManageTool::ModifyCurrentUserPassword(int userID, FString NewPassword)
 {
 	return false;
 }
 
-int FUserDataManagerTool::GetUserIDWithIdentifier(FString Identifier)
+int FUserDateManageTool::GetUserIDWithIdentifier(FString Identifier)
 {
 	return 0;
 }
 
-FString FUserDataManagerTool::uitoa(uint32 n)
+FString FUserDateManageTool::uitoa(uint32 n)
 {
 	FString ss;
 

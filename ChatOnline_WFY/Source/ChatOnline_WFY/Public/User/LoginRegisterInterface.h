@@ -17,6 +17,7 @@
 #include "UObject/NoExportTypes.h"
 #include "UserLandManager.h"
 #include "Userwidget.h"
+#include "TextBlock.h"
 //#include "Core/SimpleMysqlLink.h"
 #include "LoginRegisterInterface.generated.h"
 
@@ -33,6 +34,36 @@ private:
 
 	virtual void PostInitProperties() override;
 
+private:
+
+	/**用来接收提示语组件							by moqi 20190925*/
+	UTextBlock* pMessageLoginPromptWord;
+
+	/**用户登录界面工具							by moqi 20190925*/
+	FUserLandManager* UserLandManager;
+
+	/**用户输入的手机号							by moqi 201909026*/
+	FString UserInputNumber;
+	/**用户输入的密码								by moqi 201909026*/
+	FString UserInputPassword;
+	/**用户第二次输入的密码						by moqi 201909026*/
+	FString SecondPassword;
+	/**用户输入的验证码							by moqi 201909026*/
+	FString UserInputVerification;
+	/**用户输入的姓名								by moqi 201909026*/
+	FString UserInputName;
+	/**用来记录手机号格式是否正确					by moqi 20190926*/
+	bool IsPhoneNumberFormat = false;
+	/**用来记录密码格式是否正确					by moqi 20190926*/
+	bool IsPasswordFormat = false;
+	/**用来记录验证码格式是否正确					by moqi 20190926*/
+	bool IsVerificationCodeFormat = false;
+	/**用来记录用户名格式是否正确					by moqi 20190926*/
+	bool IsUserNameFormat = false;
+	/**用来记录用户两次输入的密码是否一致			by moqi 20190926*/
+	bool IsPasswordEquality = false;
+
+	FTimerHandle MyTimeHandle;
 
 public:
 
@@ -231,7 +262,7 @@ public:
 private:
 
 
-	FUserLandManager* userLandManger;
+	//FUserLandManager* UserLandManager;
 
 	TSharedPtr<FSimpleMysqlLink> Link;
 
