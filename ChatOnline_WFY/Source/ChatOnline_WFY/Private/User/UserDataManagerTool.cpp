@@ -5,6 +5,10 @@
 FUserDateManageTool::FUserDateManageTool()
 {
 	//UE_LOG(LogTemp, Log, TEXT("2222FUserDateManageTool()"));
+
+	pDataBaseLinkName = MakeShareable(new FSimpleMysqlLink(InUser, InHost, InPawd, InDB, InPort, Unix_Socket, InClientFlag));
+
+
 }
 
 FUserDateManageTool::~FUserDateManageTool()
@@ -14,9 +18,9 @@ FUserDateManageTool::~FUserDateManageTool()
 
 void FUserDateManageTool::setSqlLink(TSharedRef<FSimpleMysqlLink> Link_)
 {
-	pDataBaseLinkName = Link_;
+	//pDataBaseLinkName = Link_;
 
-	if (pDataBaseLinkName)
+	/*if (pDataBaseLinkName)
 	{
 		UE_LOG(LogTemp, Log, TEXT("setSqlLink"));
 
@@ -34,7 +38,7 @@ void FUserDateManageTool::setSqlLink(TSharedRef<FSimpleMysqlLink> Link_)
 		InsertDatas.Add("register", nowtime.ToString());
 
 		pDataBaseLinkName->InsertTableData(users_TableName, InsertDatas, QueryParameters, ErrorMsg);
-	}
+	}*/
 }
 
 bool FUserDateManageTool::RegisterNewUser(FDMUserData OneUserData, FString Password, FString workID)
@@ -52,7 +56,7 @@ bool FUserDateManageTool::RegisterNewUser(FDMUserData OneUserData, FString Passw
 
 	FDateTime nowtime = FDateTime::Now();
 
-	InsertDatas.Add("nickname", OneUserData.userName);
+	InsertDatas.Add("nickname", "imrcaoaa");
 	InsertDatas.Add("power", "normal");
 	InsertDatas.Add("avatar", "NULL");
 	InsertDatas.Add("register", nowtime.ToString());
@@ -60,7 +64,7 @@ bool FUserDateManageTool::RegisterNewUser(FDMUserData OneUserData, FString Passw
 	if (pDataBaseLinkName->InsertTableData(users_TableName, InsertDatas, QueryParameters, ErrorMsg))
 	{
 
-
+		//pDataBaseLinkName->InsertTableData(user_land_TableName, );
 
 
 		return true;

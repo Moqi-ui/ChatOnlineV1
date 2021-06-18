@@ -29,42 +29,6 @@ class CHATONLINE_WFY_API ULoginRegisterInterface : public UObject
 {
 	GENERATED_BODY()
 	
-
-private:
-
-	virtual void PostInitProperties() override;
-
-private:
-
-	/**用来接收提示语组件							by moqi 20190925*/
-	UTextBlock* pMessageLoginPromptWord;
-
-	/**用户登录界面工具							by moqi 20190925*/
-	FUserLandManager* UserLandManager;
-
-	/**用户输入的手机号							by moqi 201909026*/
-	FString UserInputNumber;
-	/**用户输入的密码								by moqi 201909026*/
-	FString UserInputPassword;
-	/**用户第二次输入的密码						by moqi 201909026*/
-	FString SecondPassword;
-	/**用户输入的验证码							by moqi 201909026*/
-	FString UserInputVerification;
-	/**用户输入的姓名								by moqi 201909026*/
-	FString UserInputName;
-	/**用来记录手机号格式是否正确					by moqi 20190926*/
-	bool IsPhoneNumberFormat = false;
-	/**用来记录密码格式是否正确					by moqi 20190926*/
-	bool IsPasswordFormat = false;
-	/**用来记录验证码格式是否正确					by moqi 20190926*/
-	bool IsVerificationCodeFormat = false;
-	/**用来记录用户名格式是否正确					by moqi 20190926*/
-	bool IsUserNameFormat = false;
-	/**用来记录用户两次输入的密码是否一致			by moqi 20190926*/
-	bool IsPasswordEquality = false;
-
-	FTimerHandle MyTimeHandle;
-
 public:
 
 	UFUNCTION(BlueprintCallable, Category = "UIEvent")
@@ -72,6 +36,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "UIEvent")
 		void init();
+
+	void AddUMGToScreen(TSubclassOf<UUserWidget> MyUserWidget);
 
 	/**显示或创建一个控件								by imrcao 20210422
 	*@param							SelfWidget		自身控件
@@ -97,6 +63,13 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "UIEvent")
 		bool OnInputPasswordCommit(FText Password);
 
+	/**当用户输入完 验证码后，判断验证码是否符合规则	bu moqi 20190925
+	*@param							Code			用户输入的验证码
+	*RETURN											输入的验证码是否符合规范
+	*/
+	UFUNCTION(BlueprintCallable, Category = "UIEvent")
+		bool OnInputVerificationCodeCommit(FText Code);
+
 	/**当用户输入完用户名后，判断用户名是否符合规则		bu moqi 20190925
 	*@param							UserName		用户输入的用户名
 	*RETURN											输入的用户名是否符合规范
@@ -113,6 +86,8 @@ public:
 	/**点击退出登录按钮								by moqi 20190930*/
 	UFUNCTION(BlueprintCallable, Category = "UIEvent")
 		void OnClickExistLoginButton();
+
+
 
 
 	/*****************************账号密码登录界面调用的方法******************************/
@@ -135,6 +110,9 @@ public:
 	UFUNCTION(BlueprintCallAble, Category = "UIEvent")
 		void SetForgetPasswordColor();
 
+
+
+
 	/*****************************验证码登录界面调用的方法******************************/
 
 	/**当用户点击验证码登录按钮时执行						by moqi 20190925
@@ -144,6 +122,8 @@ public:
 		bool OnClickCodeLoginButton();
 
 
+
+
 	/*****************************注册界面调用的方法******************************/
 
 	/**当用户点击注册按钮时执行							by moqi 20190925
@@ -151,6 +131,9 @@ public:
 	*/
 	UFUNCTION(BlueprintCallAble, Category = "UIEvent")
 		bool OnClickRegisterButton();
+
+
+
 
 	/***************************** 修改密码界面调用的方法******************************/
 
@@ -259,12 +242,48 @@ public:
 
 
 
+
+private:
+
+	virtual void PostInitProperties() override;
+
+private:
+
+	/**用来接收提示语组件							by moqi 20190925*/
+	UTextBlock* pMessageLoginPromptWord;
+
+	/**用户登录界面工具							by moqi 20190925*/
+	FUserLandManager* UserLandManager;
+
+	/**用户输入的手机号							by moqi 201909026*/
+	FString UserInputNumber;
+	/**用户输入的密码								by moqi 201909026*/
+	FString UserInputPassword;
+	/**用户第二次输入的密码						by moqi 201909026*/
+	FString SecondPassword;
+	/**用户输入的验证码							by moqi 201909026*/
+	FString UserInputVerification;
+	/**用户输入的姓名								by moqi 201909026*/
+	FString UserInputName;
+	/**用来记录手机号格式是否正确					by moqi 20190926*/
+	bool IsPhoneNumberFormat = false;
+	/**用来记录密码格式是否正确					by moqi 20190926*/
+	bool IsPasswordFormat = false;
+	/**用来记录验证码格式是否正确					by moqi 20190926*/
+	bool IsVerificationCodeFormat = false;
+	/**用来记录用户名格式是否正确					by moqi 20190926*/
+	bool IsUserNameFormat = false;
+	/**用来记录用户两次输入的密码是否一致			by moqi 20190926*/
+	bool IsPasswordEquality = false;
+
+	FTimerHandle MyTimeHandle;
+
 private:
 
 
 	//FUserLandManager* UserLandManager;
 
-	TSharedPtr<FSimpleMysqlLink> Link;
+	//TSharedPtr<FSimpleMysqlLink> Link;
 
 	/******************************数据库相关信息***************************/
 

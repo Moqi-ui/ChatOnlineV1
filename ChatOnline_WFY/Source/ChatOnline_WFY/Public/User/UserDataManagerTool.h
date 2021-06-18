@@ -126,4 +126,27 @@ private:
 	FString user_auths_TableName = "user_auths";
 
 
+	//TSharedPtr<FSimpleMysqlLink> Link;
+
+	/******************************数据库相关信息***************************/
+
+	FString InUser = "root";
+
+	//FString InHost = "127.0.0.1";
+	FString InHost = "81.70.169.65"; 
+
+
+	FString InPawd = "Mrcao";
+
+	FString InDB = "wfy_database";
+
+	uint32  InPort = 3306;
+
+	FString Unix_Socket = TEXT("\0");
+
+	TArray<ESimpleClientFlags> InClientFlag = TArray<ESimpleClientFlags>();
+
+	/******************************数据库相关信息***************************/
+
+
 };
