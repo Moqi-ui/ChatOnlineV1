@@ -4,7 +4,7 @@
 #include "ChatOnline_WFYHUD.h"
 //#include <UMG/Public/Blueprint/UserWidget.h>
 #include <Engine/Engine.h>
-#include "WFY_MainPage.h"
+//#include "WFY_MainPage.h"
 #include "Kismet/GameplayStatics.h"
 
 void AChatOnline_WFYHUD::BeginPlay()
@@ -13,23 +13,23 @@ void AChatOnline_WFYHUD::BeginPlay()
 
 	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("BeginPlay"));
 
-	UWFY_MainPage* WFY_MainPage = CreateWidget<UWFY_MainPage>(GetWorld(), WidgetClass);
+	//UWFY_MainPage* WFY_MainPage = CreateWidget<UWFY_MainPage>(GetWorld(), WidgetClass);
 
-	if (WFY_MainPage !=nullptr)
-	{
-		WFY_MainPage->AddToViewport();
+	//if (WFY_MainPage !=nullptr)
+	//{
+	//	WFY_MainPage->AddToViewport();
 
-		//FPlatformProcess::Sleep(2.0f);
-		//FPlatformProcess::SleepNoStats(2.0f);
+	//	//FPlatformProcess::Sleep(2.0f);
+	//	//FPlatformProcess::SleepNoStats(2.0f);
 
-		if (WFY_MainPage->GetInitLoadPage())
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("Delay"));
-			WFY_MainPage->GetInitLoadPage()->SetVisibility(ESlateVisibility::Hidden);
-		}
-		
+	//	if (WFY_MainPage->GetInitLoadPage())
+	//	{
+	//		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("Delay"));
+	//		WFY_MainPage->GetInitLoadPage()->SetVisibility(ESlateVisibility::Hidden);
+	//	}
+	//	
 
-	}
+	//}
 
 	APlayerController* myPlayerController = Cast<APlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 

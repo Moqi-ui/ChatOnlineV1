@@ -19,7 +19,7 @@ public:
 
 public:
 
-	UPROPERTY(EditAnywhere, Category = "WFY_UserWidget")
-		TSubclassOf<class UWFY_MainPage> WidgetClass;
+	/*UPROPERTY(EditAnywhere, Category = "WFY_UserWidget")
+		TSubclassOf<class UWFY_MainPage> WidgetClass;*/
 	
 };
