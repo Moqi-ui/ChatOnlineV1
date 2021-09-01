@@ -7,7 +7,23 @@
 		{
 			"Name": "ChatOnline_WFY",
 			"Type": "Runtime",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine",
+				"UMG"
+			]
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "SimpleNetChannel",
+			"Enabled": true,
+			"MarketplaceURL": "https://renzhai.net/361.html"
+		},
+		{
+			"Name": "SimpleThread",
+			"Enabled": true,
+			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/content/f842694afc354d25b1c3cb3a5397bd9d"
 		}
 	]
 }
