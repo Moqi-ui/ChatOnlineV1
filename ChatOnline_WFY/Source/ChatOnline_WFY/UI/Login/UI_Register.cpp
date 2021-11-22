@@ -9,14 +9,17 @@
 #include "ThreadManage.h"
 #include "../../Protocols/LoginProtocols.h"
 #include "../Core/UI_CoreMacro.h"
+//#include "SendSms.h"
+
 
 void UUI_Register::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	RandNameButton->OnReleased.AddDynamic(this, &UUI_Register::RandPlayerName);
-	SendButton->OnReleased.AddDynamic(this, &UUI_Register::SendPlayerRegisterToServer);
-	TurnOffButton->OnReleased.AddDynamic(this, &UUI_Register::TurnOffRegisterUI);
+	//GetVCodeBuuton->OnReleased.AddDynamic(this, &UUI_Register::RandPlayerName);
+	RegisterButton->OnReleased.AddDynamic(this, &UUI_Register::SendPlayerRegisterToServer);
+	ReturnMainPage->OnReleased.AddDynamic(this, &UUI_Register::TurnOffRegisterUI);
+	GetVCodeBuuton->OnReleased.AddDynamic(this, &UUI_Register::TrySendVerification);
 
 	BindClientRcv();
 }
@@ -68,7 +71,7 @@ void UUI_Register::RecvProtocol(uint32 ProtocolNumber, FSimpleChannel* Channel)
 	{
 		case SP_RegisteredSuccess:
 		{
-			TurnOffRegisterUI();
+			//TurnOffRegisterUI();
 			SetNewMess("Registered successful.");
 			break;
 		}
@@ -84,7 +87,19 @@ void UUI_Register::RecvProtocol(uint32 ProtocolNumber, FSimpleChannel* Channel)
 		}
 		case SP_ServerError:
 		{
+
 			SetNewMess("Server Error.");
+			break;
+		}
+		case SP_GetVerificationSucceed:
+		{
+			FString code;
+			SIMPLE_PROTOCOLS_RECEIVE(SP_GetVerificationSucceed, code);
+
+			SendUserVerification = code;
+
+			SetNewMess(code);
+
 			break;
 		}
 	}
@@ -92,15 +107,25 @@ void UUI_Register::RecvProtocol(uint32 ProtocolNumber, FSimpleChannel* Channel)
 
 void UUI_Register::SendPlayerRegisterToServer()
 {
-	//注册信息
-	FString NickNameString = NickName->GetText().ToString();
-	FString AccountString = Account->GetText().ToString();
-	FString PasswordString = Password->GetText().ToString();
-	if (AccountString.Len() >= 6)
+	//判断输入的验证码是否正确
+	if (!VerifyVerification())
 	{
-		if (PasswordString.Len() >= 6)
+		SetNewMess("Verification input error");
+
+		return;
+	}
+
+	//注册信息
+	FString userName = UserName->GetText().ToString();
+	FString userPhone = UserPhone->GetText().ToString();
+	FString userPassword = UserPassword->GetText().ToString();
+	//FString InputVerification = VerificationCode->GetText().ToString();
+
+	if (userPhone.Len() >= 6)
+	{
+		if (userPassword.Len() >= 6)
 		{
-			SEND_DATA(SP_Registered, NickNameString, AccountString, PasswordString)
+			SEND_DATA(SP_Registered, userName, userPhone, userPassword)
 			SetNewMess("");
 		}
 		else
@@ -127,10 +152,44 @@ void UUI_Register::TurnOffRegisterUI()
 	}
 }
 
+void UUI_Register::TrySendVerification()
+{
+	//注册信息
+	FString userPhone = UserPhone->GetText().ToString();
+	if (VerifyInputPhone(userPhone))
+	{
+		SEND_DATA(SP_TryGetVerification, userPhone)
+		SetNewMess("");
+	}
+}
+
+bool UUI_Register::VerifyVerification()
+{
+	FString inputVerification = VerificationCode->GetText().ToString();
+
+	if (SendUserVerification == inputVerification)
+	{
+		return true;
+	}
+	return false;
+}
+bool UUI_Register::VerifyInputPhone(FString Phone)
+{
+	if (Phone.Len() != 11)
+	{
+		SetNewMess("Phone Format is not right");
+		//SetNewMess("请输入十一位手机号");
+
+		return false;
+	}
+
+	return true;
+}
+
 void UUI_Register::SetNewMess(const FString& NewMess)
 {
-	if (Messl)
+	if (Prompt)
 	{
-		Messl->SetText(FText::FromString(NewMess));
+		Prompt->SetText(FText::FromString(NewMess));
 	}
 }

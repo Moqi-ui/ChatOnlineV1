@@ -1,11 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 /*********************************************************
 *
-* @author			RenZhai						(人宅)
-* @date				2018, 09, 28, 10:30: 00		(2018年09月28日10:30 : 00)
+* @author			Imrcao						(曹洛)
+* @date				2021，11，11, 11:32: 00		(2018年09月28日10:30 : 00)
 * @brief			Register UI					(注册UI界面)
 * @see
-* @tutorial See		http://www.aboutcg.org/course/tut_ue4programming_180119/
+* @See				http://www.imrcao.com
 * @note
 **********************************************************/
 #pragma once
@@ -21,40 +21,43 @@ class UUI_Register : public UUI_CoreBase
 {
 	GENERATED_BODY()
 	
-	//匿名实例
+	//用户名
 	//anonymous instance
 	UPROPERTY(meta = (BindWidget))
-	class UEditableTextBox *NickName;
+	class UEditableTextBox *UserName;
 
 	//账户实例
 	//account instance
 	UPROPERTY(meta = (BindWidget))
-	class UEditableTextBox *Account;
+	class UEditableTextBox* UserPhone;
 	
 	//密码实例
 	//password instance
 	UPROPERTY(meta = (BindWidget))
-	class UEditableTextBox *Password;
+	class UEditableTextBox* UserPassword;
 
-	//随机名字按钮
-	//random name button
+	//验证码正文
 	UPROPERTY(meta = (BindWidget))
-	class UButton *RandNameButton;
+	class UEditableTextBox* VerificationCode;
 
-	//发送注册完成的按钮信息
+	//获取验证码GetVCodeBuuton
+	UPROPERTY(meta = (BindWidget))
+	class UButton *GetVCodeBuuton;
+
+	//尝试注册按钮
 	//Sending button information completed by registration
 	UPROPERTY(meta = (BindWidget))
-	class UButton *SendButton;
+	class UButton *RegisterButton;
 
 	//返回到登陆界面的按钮
 	//Return to the landing interface button
 	UPROPERTY(meta = (BindWidget))
-	class UButton *TurnOffButton;
+	class UButton *ReturnMainPage;
 
 	//注册的消息
 	//Registration message
 	UPROPERTY(meta = (BindWidget))
-	class UTextBlock *Messl;
+	class UTextBlock *Prompt;
 
 public:
 
@@ -70,6 +73,13 @@ public:
 	UFUNCTION()
 	void SendPlayerRegisterToServer();
 
+	UFUNCTION()
+	void TurnOffRegisterUI();
+
+	//尝试发送验证码
+	UFUNCTION()
+	void TrySendVerification();
+
 	//在服务端检测名字是否正确
 	bool CheckNameToServer();
 
@@ -77,12 +87,18 @@ public:
 
 	void RecvProtocol(uint32 ProtocolNumber, FSimpleChannel* Channel);
 
-	//关闭注册UI
-	//close registration UI
-	UFUNCTION()
-	void TurnOffRegisterUI();
+	//核验验证码是否输入正确
+	bool VerifyVerification();
+
+	bool VerifyInputPhone(FString Phone);
+
 
 	//设置新消息
 	//Set new message
 	void SetNewMess(const FString& NewMess);
+
+
+private:
+
+	FString SendUserVerification;
 };

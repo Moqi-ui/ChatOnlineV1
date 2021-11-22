@@ -3,7 +3,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "UI_LoginMain.h"
-//#include "UI_Register.h"
+#include "UI_Register.h"
 #include "UI_Login.h"
 //#include "UI_ServerIn.h"
 #include "Components/Button.h"
@@ -14,7 +14,7 @@ void UUI_LoginMain::NativeConstruct()
 	Super::NativeConstruct();
 
 	UI_Login->SetParents(this);
-	//UI_Register->SetParents(this);
+	UI_Register->SetParents(this);
 	//UI_ServerIn->SetParents(this);
 
 	OpenMainUI();
@@ -66,33 +66,40 @@ void UUI_LoginMain::CloseLoginUI()
 		//	OutAnimation->OnAnimationFinished.AddDynamic(this, &UH_UI_LoginMain::LoginOutAnimationFinish);
 		//}
 
-		FWidgetAnimationDynamicEvent WidgetAnimationDynamicEvent;
+		/*FWidgetAnimationDynamicEvent WidgetAnimationDynamicEvent;
 		WidgetAnimationDynamicEvent.BindDynamic(this, &UUI_LoginMain::LoginOutAnimationFinish);
 		UnbindFromAnimationFinished(OutAnimation, WidgetAnimationDynamicEvent);
 		BindToAnimationFinished(OutAnimation, WidgetAnimationDynamicEvent);
 
-		PlayAnimation(OutAnimation);
+		PlayAnimation(OutAnimation);*/
 	}
 }
 
 void UUI_LoginMain::OpenRegisterUI()
 {
-	PlayAnimation(GetNameWidgetAnimation(TEXT("BlurIn")));
+
+
+	UI_Login->SetVisibility(ESlateVisibility::Hidden);
+	UI_Register->SetVisibility(ESlateVisibility::Visible);
+	//PlayAnimation(GetNameWidgetAnimation(TEXT("BlurIn")));
 }
 
 void UUI_LoginMain::CloseRegisterUI()
 {
-	PlayAnimation(GetNameWidgetAnimation(TEXT("BlurOut")));
+
+	UI_Login->SetVisibility(ESlateVisibility::Visible);
+	UI_Register->SetVisibility(ESlateVisibility::Hidden);
+	//PlayAnimation(GetNameWidgetAnimation(TEXT("BlurOut")));
 }
 
 void UUI_LoginMain::OpenServerUI()
 {
-	PlayAnimation(GetNameWidgetAnimation(TEXT("ServerMainIn")));
+	//PlayAnimation(GetNameWidgetAnimation(TEXT("ServerMainIn")));
 }
 
 void UUI_LoginMain::CloseServerUI()
 {
-	PlayAnimation(GetNameWidgetAnimation(TEXT("ServerMainOut")));
+	//PlayAnimation(GetNameWidgetAnimation(TEXT("ServerMainOut")));
 }
 
 void UUI_LoginMain::OpenServerList()
@@ -117,7 +124,7 @@ void UUI_LoginMain::MainOutAnimationFinish()
 
 void UUI_LoginMain::LoginOutAnimationFinish()
 {
-	OpenServerUI();
+	//OpenServerUI();
 }
 
 //void UUI_LoginMain::AddSeverList(uint8 InType, const TArray<struct FGateInfo>& InNetInfo)

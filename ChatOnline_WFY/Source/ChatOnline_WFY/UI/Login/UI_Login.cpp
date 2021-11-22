@@ -98,18 +98,14 @@ void UUI_Login::LoginCallback()
 	UGameplayStatics::OpenLevel(GetWorld(), FName(TEXT("81.70.169.65:7777")));
 	//UGameplayStatics::OpenLevel(GetWorld(), FName(TEXT("127.0.0.1")));
 
-
-
-
-
 	//向服务端发送信息验证,通过后进入服务器列表状态
-	if (1)
+	/*if (1)
 	{
 		if (GetParents<UUI_LoginMain>())
 		{
 			GetParents<UUI_LoginMain>()->CloseLoginUI();
 		}
-	}
+	}*/
 }
 
 void UUI_Login::RecvProtocol(uint32 ProtocolNumber, FSimpleChannel* Channel)
@@ -129,10 +125,10 @@ void UUI_Login::RecvProtocol(uint32 ProtocolNumber, FSimpleChannel* Channel)
 		//GetParents<UUI_LoginMain>()->AddSeverList(0, GateInfos);
 
 		//释放自己
-		if (Channel)
+		/*if (Channel)
 		{
 			Channel->DestroySelf();
-		}
+		}*/
 		break;
 	}
 	case SP_LoginFailed:
@@ -170,32 +166,27 @@ void UUI_Login::SignInGame()
 			FString PasswordString = Password->GetText().ToString();
 			SEND_DATA(SP_Login, AccountString, PasswordString)
 
-				return;
+			return;
 		}
 	}
 
 	//播放摇头动画
 	// play the shaking head animation.
-	PlayAnimation(GetNameWidgetAnimation(TEXT("TipAnimation")));
+	//PlayAnimation(GetNameWidgetAnimation(TEXT("TipAnimation")));
 }
 
 void UUI_Login::SignUpGame()
 {
-	/*if (GetParents<UUI_LoginMain>())
+	if (GetParents<UUI_LoginMain>())
 	{
 		GetParents<UUI_LoginMain>()->OpenRegisterUI();
-	}*/
-
-	FString MyName = "Mrcao21";
-	FString AccountString1 = Account->GetText().ToString();
-	FString PasswordString1 = Password->GetText().ToString();
-	SEND_DATA(SP_Registered, MyName, AccountString1, PasswordString1)
+	}
 }
 
 void UUI_Login::LoginMsg(FString Mes)
 {
-	if (LoginMes)
+	if (TipText)
 	{
-		LoginMes->SetText(FText::FromString(Mes));
+		TipText->SetText(FText::FromString(Mes));
 	}
 }
