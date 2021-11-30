@@ -95,7 +95,7 @@ bool UUI_Login::IsPasswordValid()
 void UUI_Login::LoginCallback()
 {
 	//openLevel
-	UGameplayStatics::OpenLevel(GetWorld(), FName(TEXT("81.70.169.65:7777")));
+	UGameplayStatics::OpenLevel(GetWorld(), FName(TEXT("150.158.18.192:7777")));
 	//UGameplayStatics::OpenLevel(GetWorld(), FName(TEXT("127.0.0.1")));
 
 	//向服务端发送信息验证,通过后进入服务器列表状态
