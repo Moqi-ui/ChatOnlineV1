@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "ChatOnline_WFYCharacter.generated.h"
 
+class FSimpleNetManage;
+
 UCLASS(config=Game)
 class AChatOnline_WFYCharacter : public ACharacter
 {
@@ -28,6 +30,8 @@ public:
 	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
+
+	FSimpleNetManage* GetClient();
 
 protected:
 
@@ -62,6 +66,21 @@ protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	// End of APawn interface
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason);
+
+	virtual void Tick(float DeltaTime) override;
+
+protected:
+
+
+	int PlayerNumbers = 0;
+
+	FSimpleNetManage* ClientGaming;
 
 public:
 	/** Returns CameraBoom subobject **/

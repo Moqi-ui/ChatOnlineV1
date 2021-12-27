@@ -55,6 +55,17 @@ public:
 	}
 
 	template<class T>
+	T* GetCurrentCharacter()
+	{
+		if (GetWorld())
+		{
+			return Cast<T>(GetWorld()->GetFirstPlayerController()->GetCharacter());
+		}
+
+		return NULL;
+	}
+
+	template<class T>
 	T* GetCurrentHUD()
 	{
 		if (GetWorld() && GetWorld()->GetFirstPlayerController())

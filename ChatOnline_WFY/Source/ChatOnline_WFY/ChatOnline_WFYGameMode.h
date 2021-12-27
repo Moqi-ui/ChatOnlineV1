@@ -6,6 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "ChatOnline_WFYGameMode.generated.h"
 
+
 UCLASS(minimalapi)
 class AChatOnline_WFYGameMode : public AGameModeBase
 {
@@ -13,6 +14,24 @@ class AChatOnline_WFYGameMode : public AGameModeBase
 
 public:
 	AChatOnline_WFYGameMode();
+
+	virtual void BeginPlay() override;
+
+	virtual void Tick(float DeltaTime) override;
+
+	virtual void PostLogin(APlayerController* NewPlayer) override;
+
+	virtual void Logout(AController* Exiting) override;
+
+
+
+
+public:
+
+	//int MaxPlayerNum = 0;
+
+	//int CurrentPlayerNum = 0;
+
 };
 
 

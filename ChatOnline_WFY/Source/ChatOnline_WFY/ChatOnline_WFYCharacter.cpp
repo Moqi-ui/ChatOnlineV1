@@ -1,6 +1,12 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "ChatOnline_WFYCharacter.h"
+
+#include "ThreadManage.h"
+#include "Global/SimpleNetGlobalInfo.h"
+#include "../Network/ClientObjectController.h"
+#include "SimpleNetManage.h"
+
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -8,6 +14,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "UI/Core/UI_CoreMacro.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AChatOnline_WFYCharacter
@@ -47,6 +54,59 @@ AChatOnline_WFYCharacter::AChatOnline_WFYCharacter()
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 }
 
+void AChatOnline_WFYCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	PlayerNumbers++;
+	UE_LOG(LogTemp, Warning, TEXT("UE_LOG:AChatOnline_WFYCharacter::BeginPlay()::Player:%d"), PlayerNumbers);
+
+	//2.初始化配置表
+	FSimpleNetGlobalInfo::Get()->Init();//初始化我们通道
+
+	//3.创建对象
+	ClientGaming = FSimpleNetManage::CreateManage(ESimpleNetLinkState::LINKSTATE_CONNET, ESimpleSocketType::SIMPLESOCKETTYPE_UDP);
+	FSimpleChannel::SimpleControllerDelegate.BindLambda(
+		[]()->UClass*
+		{
+			return UClientObjectController::StaticClass();
+		});
+
+	//4.初始化
+	if (!ClientGaming->Init())
+	{
+		ClientGaming = NULL;
+		//UE_LOG(LogDBServer, Error, TEXT("Server Init fail."));
+		return;
+	}
+}
+
+void AChatOnline_WFYCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	PlayerNumbers--;
+
+	UE_LOG(LogTemp, Warning, TEXT("UE_LOG:AChatOnline_WFYCharacter::EndPlay::Player:%d"), PlayerNumbers);
+
+	FSimpleNetManage::Destroy(ClientGaming);
+
+	GThread::Get()->Destroy();
+}
+
+void AChatOnline_WFYCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	GThread::Get()->Tick(DeltaTime);
+	ClientGaming->Tick(DeltaTime);
+}
+
+FSimpleNetManage* AChatOnline_WFYCharacter::GetClient()
+{
+	return ClientGaming;
+}
+
 //////////////////////////////////////////////////////////////////////////
 // Input
 
@@ -75,6 +135,8 @@ void AChatOnline_WFYCharacter::SetupPlayerInputComponent(class UInputComponent* 
 	// VR headset functionality
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &AChatOnline_WFYCharacter::OnResetVR);
 }
+
+
 
 
 void AChatOnline_WFYCharacter::OnResetVR()
