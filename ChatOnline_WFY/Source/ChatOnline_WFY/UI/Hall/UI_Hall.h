@@ -96,7 +96,7 @@ private:
 	void SerachCurrentRoom();
 
 	UFUNCTION()
-	void JoinCurrentSelectedRoom(FString RoomPort);
+	void JoinCurrentSelectedRoom(FString HandleRoomInfo);
 
 private:
 

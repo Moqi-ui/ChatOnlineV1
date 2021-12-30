@@ -40,7 +40,7 @@ void AGameModeHall::PostLogin(APlayerController* NewPlayer)
 	Super::PostLogin(NewPlayer);
 
 
-	GEngine->AddOnScreenDebugMessage(-1, 4.0f, FColor::Green, "PostLogin");
+	GEngine->AddOnScreenDebugMessage(-1, 4.0f, FColor::Green, "AGameModeHall::PostLogin");
 }
 
 void AGameModeHall::Logout(AController* Exiting)

@@ -4,12 +4,14 @@
 #include "LevelScriptActorRoom.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/Engine.h"
-#include "tmg_sdk.h"
-#include "VoiceControlSystem.h"
+//#include "tmg_sdk.h"
+#include "BaseVoiceControlSystem.h"
 
 ALevelScriptActorRoom::ALevelScriptActorRoom()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
+	//VoiceControlSystem = nullptr;
 }
 
 void ALevelScriptActorRoom::BeginPlay() {
@@ -17,22 +19,26 @@ void ALevelScriptActorRoom::BeginPlay() {
 
 	//UGameplayStatics::GetPlayerController(GetWorld(), 0)->bShowMouseCursor = true;
 
-	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.0f, FColor::Yellow, TEXT("BeginPlay"));
+	//GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.0f, FColor::Yellow, TEXT("BeginPlay"));
 
-	myVoiceControlSystem = NewObject<UVoiceControlSystem>();
+	//VoiceControlSystem = NewObject<UBaseVoiceControlSystem>();
 
-	if (myVoiceControlSystem)
-	{
-		//myVoiceControlSystem->OnInitGME();
+	
 
-		//myVoiceControlSystem->OnEnterRoom("202101");
+	//if (VoiceControlSystem)
+	//{
+	//	FString strAppId = "1400452190";
+	//	FString strKey = "U8fTpuA3H0tl4PyI";
 
-		//myVoiceControlSystem->onCheckMic(true);
+	//	srand(time(NULL));
+	//	int uid = rand() % 10000 + 50000;
+	//	FString strUserId = FString::FromInt(uid);
+	//	VoiceControlSystem->InitGME(strAppId, strKey, strUserId);
 
-		//myVoiceControlSystem->onCheckSpeaker(true);
+	//	//VoiceControlSystem->EnterRoom("202102", ITMG_ROOM_TYPE::ITMG_ROOM_TYPE_FLUENCY);
 
-		GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.0f, FColor::Yellow, TEXT("myVoiceControlSystem"));
-	}
+	//	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.0f, FColor::Yellow, TEXT("myVoiceControlSystem"));
+	//}
 }
 
 void ALevelScriptActorRoom::Tick(float DeltaSeconds) 
@@ -44,6 +50,7 @@ void ALevelScriptActorRoom::Tick(float DeltaSeconds)
 
 void ALevelScriptActorRoom::EndPlay(const EEndPlayReason::Type EndPlayReason) {
 	Super::EndPlay(EndPlayReason);
+	//VoiceControlSystem = nullptr;
 	ITMGContextGetInstance()->Uninit();
 }
 

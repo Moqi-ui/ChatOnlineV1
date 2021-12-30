@@ -47,5 +47,7 @@ public:
 	//ÆôÓÃ¶ú·µ
 	UFUNCTION(BLueprintCallable, Category = "GME")
 		void EarToReturn(bool icChecked);
+
+	FString strUserId;
 	
 };

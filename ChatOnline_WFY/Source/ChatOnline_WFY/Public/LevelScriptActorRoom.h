@@ -6,7 +6,7 @@
 #include "Engine/LevelScriptActor.h"
 #include "LevelScriptActorRoom.generated.h"
 
-class UVoiceControlSystem;
+class UBaseVoiceControlSystem;
 /**
  * 
  */
@@ -23,6 +23,6 @@ public:
 
 private:
 
-	UVoiceControlSystem* myVoiceControlSystem;
+	//UBaseVoiceControlSystem* VoiceControlSystem = nullptr;
 
 };

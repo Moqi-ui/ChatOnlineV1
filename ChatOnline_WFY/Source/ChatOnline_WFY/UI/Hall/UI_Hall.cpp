@@ -18,6 +18,8 @@
 
 #include "UI_OneRoom.h"
 #include "Gaming/ChatOnLine_GameInstance.h"
+#include "Global/SimpleNetGlobalInfo.h"
+
 
 
 void UUI_Hall::NativeConstruct()
@@ -32,7 +34,7 @@ void UUI_Hall::NativeConstruct()
 	//JoinRoomButton->OnReleased.AddDynamic(this, &UUI_Hall::JoinCurrentSelectedRoom);
 	FindRoomButton->OnReleased.AddDynamic(this, &UUI_Hall::SerachCurrentRoom);
 
-	GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Blue, "NativeConstruct()");
+	//GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Blue, "NativeConstruct()");
 
 	//InputRoomName = (SEditableTextBox*)GetWidgetFromName(TEXT("InputRoomName"));
 
@@ -87,23 +89,23 @@ void UUI_Hall::RecvProtocol(uint32 ProtocolNumber, FSimpleChannel* Channel)
 
 			RoomInfo.Split("/", &Port,nullptr);
 
-			FString URL = FString::Printf(TEXT("127.0.0.1:%s"),*Port);
+			FString URLIP = "127.0.0.1";
+
+			if (FSimpleNetGlobalInfo::Get())
+			{
+				URLIP = FSimpleNetGlobalInfo::Get()->GetInfo().URL;
+			}
+			//FString URL = FString::Printf(TEXT("127.0.0.1:%s"),*Port);
+			FString URL = URLIP + ":" + Port;
 
 			//知识点：FString To FName  :  FName TestName = *URL;
 			UGameplayStatics::OpenLevel(GetWorld(), *URL);
-
 
 			UChatOnLine_GameInstance* Instance = Cast<UChatOnLine_GameInstance>(GetGameInstance());
 			if (Instance)
 			{
 				Instance->SetCurrentRoomInfo(RoomInfo);
-				Instance->AddOnePlayerNumbers();
-				int fff = Instance->GetCurrentPlayerNumbers();
-				UE_LOG(LogTemp, Warning, TEXT("UE_LOG:SP_CreateRoomSuccess_RoomName:%s;PlayerNumber:%d"),*RoomInfo, fff);
-
 			}
-
-			LoginMsg(TEXT("Login failed~"));
 			break;
 		}
 		case SP_FindRoom:
@@ -182,27 +184,31 @@ void UUI_Hall::SerachCurrentRoom()
 	GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Blue, "SerachCurrentRoom()");
 
 }
-void UUI_Hall::JoinCurrentSelectedRoom(FString RoomPort)
+void UUI_Hall::JoinCurrentSelectedRoom(FString HandleRoomInfo)
 {
-	//FString Port = "9998";
+	FString RoomPort;
 
-	FString URL = FString::Printf(TEXT("127.0.0.1:%s"), *RoomPort);
+	HandleRoomInfo.Split("/", &RoomPort, nullptr);
 
-	//知识点：FString To FName  :  FName TestName = *URL;
-	UGameplayStatics::OpenLevel(GetWorld(), *URL);
+	FString URLIP = "127.0.0.1";
+
+	if (FSimpleNetGlobalInfo::Get())
+	{
+		URLIP = FSimpleNetGlobalInfo::Get()->GetInfo().URL;
+	}
+	//FString URL = FString::Printf(TEXT("127.0.0.1:%s"),*Port);
+	FString URL = URLIP + ":" + RoomPort;
+
+	SEND_DATA_Hall(SP_JoinSelectRoom, HandleRoomInfo);
 
 	UChatOnLine_GameInstance* Instance = Cast<UChatOnLine_GameInstance>(GetGameInstance());
 	if (Instance)
 	{
-		//Instance->SetCurrentRoomInfo(RoomInfo);
-		Instance->AddOnePlayerNumbers();
-		int dddd = Instance->GetCurrentPlayerNumbers();
-		UE_LOG(LogTemp, Warning, TEXT("UE_LOG:JoinCurrentSelectedRoom:%d"), dddd);
-
+		Instance->SetCurrentRoomInfo(HandleRoomInfo);
 	}
 
-	GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Blue, "JoinCurrentSelectedRoom()");
-
+	//知识点：FString To FName  :  FName TestName = *URL;
+	UGameplayStatics::OpenLevel(GetWorld(), *URL);
 }
 
 void UUI_Hall::CreateRoomWidget(FString ServerNameInfo)
@@ -230,8 +236,6 @@ void UUI_Hall::CreateRoomWidget(FString ServerNameInfo)
 
 		ScrollRoomList->AddChild(OneRoom);
 	}
-
-
 }
 
 void UUI_Hall::AnalysisString(FString Str)

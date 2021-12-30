@@ -31,15 +31,22 @@ void UUI_OneRoom::OnClickJoinRoomButton()
 {
 	//DE_JoinRoom.Excute();
 
-	JoinRoom.ExecuteIfBound(RoomPort);
+	JoinRoom.ExecuteIfBound(HandleRoomInfo);
 }
 
 void UUI_OneRoom::SetRoomInfo(FString ServerRoomInfo)
 {
-	FText text = FText::FromString(ServerRoomInfo);
-	RoomInfo->SetText(text);
+	HandleRoomInfo = ServerRoomInfo;
 
 	ServerRoomInfo.Split("/", &RoomPort, &RoomName);
+	RoomID = RoomName;
+	RoomID.Split("/", &RoomName, &RoomID);
+
+	FString ShowInfo = FString::Printf(TEXT("RoomName:%s--RoomID:%s--Port:%s"), *RoomName, *RoomID, *RoomPort);
+
+	FText text = FText::FromString(ShowInfo);
+
+	RoomInfo->SetText(text);
 }
 
 

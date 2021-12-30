@@ -52,5 +52,9 @@ private:
 
 	FString RoomName;
 
+	FString RoomID;
+
+	FString HandleRoomInfo;
+
 };
 

@@ -9,6 +9,8 @@
 /**
  * 
  */
+class UTexture2D;
+class UBaseVoiceControlSystem;
 UCLASS()
 class CHATONLINE_WFY_API UUI_GamingPage : public UUI_CoreBase
 {
@@ -22,6 +24,18 @@ class CHATONLINE_WFY_API UUI_GamingPage : public UUI_CoreBase
 
 	UPROPERTY(meta = (BindWidget))
 		class UButton* Speaker;
+
+	UPROPERTY(meta = (BindWidget))
+		class UButton* EarToReturnButton;
+
+	UPROPERTY(meta = (BindWidget))
+		class UImage* Mic_Image;
+
+	UPROPERTY(meta = (BindWidget))
+		class UImage* Speaker_Image;
+
+	UPROPERTY(meta = (BindWidget))
+		class UImage* EarToReturn_Image;
 
 public:
 	virtual void NativeConstruct();
@@ -43,4 +57,23 @@ private:
 	UFUNCTION()
 	void OnClickSpeakerButton();
 
+	UFUNCTION()
+	void OnClickEarToReturnButton();
+
+private:
+
+	UTexture2D* SpeackCheck;
+	UTexture2D* SpeackUncheck;
+	UTexture2D* MicCheck;
+	UTexture2D* MicUncheck;
+
+	UPROPERTY()
+	UBaseVoiceControlSystem* BaseVoiceControl;
+	//UTexture2D* SpeackCheck;
+
+	FString UserID;
+
+	bool MicState = false;
+	bool SpeakerState = false;
+	bool EarState = false;
 };

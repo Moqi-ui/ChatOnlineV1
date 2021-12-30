@@ -4,9 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include <string>
 #include <stdlib.h>
 #include <stdio.h>
-#include <string>
 #include "tmg_sdk.h"
 #include "BaseVoiceControlSystem.generated.h"
 
@@ -27,19 +27,32 @@ public:
 
 	virtual void OnEvent(ITMG_MAIN_EVENT_TYPE eventType, const char* data);
 
-protected:
+public:
 
-	int InitGME(std::string sdkAppId, std::string sdkAppKey, std::string OpenId);
+	int InitGME();
 
-	void EnterRoom(std::string roomId, ITMG_ROOM_TYPE roomType);
+	void EnterRoom(FString roomId_, ITMG_ROOM_TYPE roomType);
+
+	int OnExitRoom();
+
+	void onCheckMic(bool isChecked);
+
+	void onCheckSpeaker(bool isChecked);
+
+	int GMEGetMicState();
+
+	int GMEGetSpeakerState();
+
+	//ÆôÓÃ¶ú·µ
+	void EarToReturn(bool icChecked);
 
 
+private:
 
+	std::string m_appId = "1400452190";
+	std::string m_appKey= "U8fTpuA3H0tl4PyI";
+	//std::string m_userId;
 
-protected:
-
-	std::string m_appId;
-	std::string m_appKey;
-	std::string m_userId;
-
+	FString UserId;
+	
 };
