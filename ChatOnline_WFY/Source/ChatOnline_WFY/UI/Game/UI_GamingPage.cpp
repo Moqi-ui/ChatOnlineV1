@@ -11,6 +11,10 @@
 #include <Kismet/GameplayStatics.h>
 #include "Gaming/ChatOnLine_GameInstance.h"
 #include "BaseVoiceControlSystem.h"
+//#include "Components/Button.h"
+#include "Components/TextBlock.h"
+#include "Components/CanvasPanel.h"
+#include "Components/WidgetSwitcher.h"
 
 void UUI_GamingPage::NativeConstruct()
 {
@@ -20,6 +24,12 @@ void UUI_GamingPage::NativeConstruct()
 	Mic->OnClicked.AddDynamic(this, &UUI_GamingPage::OnClickMicButton);
 	Speaker->OnClicked.AddDynamic(this, &UUI_GamingPage::OnClickSpeakerButton);
 	EarToReturnButton->OnClicked.AddDynamic(this, &UUI_GamingPage::OnClickEarToReturnButton);
+	RoomPageButton->OnClicked.AddDynamic(this, &UUI_GamingPage::SwitchRoomPage);
+	VoicePageButton->OnClicked.AddDynamic(this, &UUI_GamingPage::SwitchVoicePage);
+	SetingPageButton->OnClicked.AddDynamic(this, &UUI_GamingPage::SwitchSettingPage);
+	ExitRoom->OnClicked.AddDynamic(this, &UUI_GamingPage::RequestExitRoom);
+	ExitGame->OnClicked.AddDynamic(this, &UUI_GamingPage::RequestExitGame);
+	ReturnGmaing->OnClicked.AddDynamic(this, &UUI_GamingPage::ReturnGaming);
 	//加载Content目录下的资源文件
 	//方法一：
 	SpeackCheck = LoadObject<UTexture2D>(nullptr, TEXT("/Game/ChatOnline/WFY_Textture/Icon/Speaker_Check"));
@@ -40,9 +50,12 @@ void UUI_GamingPage::NativeConstruct()
 		UChatOnLine_GameInstance* Instance = Cast<UChatOnLine_GameInstance>(GetGameInstance());
 		if (Instance)
 		{
-			RoomID = Instance->GetCurrentRoomInfo();
-			RoomID.Split("/", nullptr, &RoomID);
-			RoomID.Split("/",nullptr, &RoomID);
+			if (!RoomID.IsEmpty())
+			{
+				RoomID = Instance->GetCurrentRoomInfo();
+				RoomID.Split("/", nullptr, &RoomID);
+				RoomID.Split("/", nullptr, &RoomID);
+			}
 		}
 		BaseVoiceControl->EnterRoom(RoomID, ITMG_ROOM_TYPE::ITMG_ROOM_TYPE_FLUENCY);
 	}
@@ -83,9 +96,23 @@ void UUI_GamingPage::RecvProtocol(uint32 ProtocolNumber, FSimpleChannel* Channel
 		{
 			BaseVoiceControl->OnExitRoom();
 
-			GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.0f, FColor::Yellow, TEXT("UChatOnLine_GameInstance::OnExitRoom()"));
+			if (bIsExitGame)
+			{
+				GetWorld()->GetFirstPlayerController()->ConsoleCommand("QUIT");
+			}
+			else
+			{
+				UGameplayStatics::OpenLevel(GetWorld(), TEXT("ThirdPersonExampleMap"));
+			}
+			break;
+		}
+		case SP_GetPlayerNumberResult:
+		{
+			FString CurrentPlayerNumber;
 
-			UGameplayStatics::OpenLevel(GetWorld(), TEXT("ThirdPersonExampleMap"));
+			SIMPLE_PROTOCOLS_RECEIVE(SP_GetPlayerNumberResult, CurrentPlayerNumber);
+
+			UpdateRoomInfo(CurrentPlayerNumber);
 
 			break;
 		}
@@ -94,24 +121,15 @@ void UUI_GamingPage::RecvProtocol(uint32 ProtocolNumber, FSimpleChannel* Channel
 
 void UUI_GamingPage::OnClickMenuButton()
 {
+	GameMenuPage->SetVisibility(ESlateVisibility::Visible);
 
-	//BaseVoiceControl->OnExitRoom();
-	//BaseVoiceControl->EnterRoom("202101", UserID, (ITMG_ROOM_TYPE)0);
+	//FInputModeUIOnly inputModeUIOnly;
 
-	//BaseVoiceControl->EnterRoom("202101", UserID, ITMG_ROOM_TYPE::ITMG_ROOM_TYPE_FLUENCY);
-	//BaseVoiceControl->OnExitRoom();
-	//UGameplayStatics::OpenLevel(GetWorld(), TEXT("ThirdPersonExampleMap"));
-	//退出房间
-	FString Key_RoomName;
+	//TSharedPtr<SWidget>
 
-	UChatOnLine_GameInstance* Instance = Cast<UChatOnLine_GameInstance>(GetGameInstance());
+	//inputModeUIOnly.SetWidgetToFocus(this);
 
-	if (Instance)
-	{
-		Key_RoomName = Instance->GetCurrentRoomInfo();
-
-		SEND_DATA_GAME(SP_GetCurrentRoomPlayers, Key_RoomName);
-	}
+	//GetWorld()->GetFirstPlayerController()->SetInputMode(inputModeUIOnly);
 }
 
 void UUI_GamingPage::OnClickMicButton()
@@ -179,5 +197,83 @@ void UUI_GamingPage::OnClickEarToReturnButton()
 			GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.0f, FColor::Yellow, TEXT("OnClickEarToReturnButton--Enable"));
 
 		}
+	}
+}
+
+void UUI_GamingPage::SwitchRoomPage()
+{
+	FString Key_RoomName;
+
+	UChatOnLine_GameInstance* Instance = Cast<UChatOnLine_GameInstance>(GetGameInstance());
+
+	if (Instance)
+	{
+		Key_RoomName = Instance->GetCurrentRoomInfo();
+
+		SEND_DATA_GAME(SP_GetCurrentRoomPlayers, Key_RoomName);
+	}
+
+	GameSwitchPage->SetActiveWidgetIndex(0);
+}
+void UUI_GamingPage::SwitchVoicePage()
+{
+	GameSwitchPage->SetActiveWidgetIndex(1);
+}
+void UUI_GamingPage::SwitchSettingPage()
+{
+	GameSwitchPage->SetActiveWidgetIndex(2);
+}
+void UUI_GamingPage::RequestExitRoom()
+{
+	FString Key_RoomName;
+
+	UChatOnLine_GameInstance* Instance = Cast<UChatOnLine_GameInstance>(GetGameInstance());
+
+	if (Instance)
+	{
+		Key_RoomName = Instance->GetCurrentRoomInfo();
+
+		SEND_DATA_GAME(SP_RequestExitRoom, Key_RoomName);
+	}
+}
+void UUI_GamingPage::RequestExitGame()
+{
+	FString Key_RoomName;
+
+	bIsExitGame = true;
+
+	UChatOnLine_GameInstance* Instance = Cast<UChatOnLine_GameInstance>(GetGameInstance());
+
+	if (Instance)
+	{
+		Key_RoomName = Instance->GetCurrentRoomInfo();
+
+		SEND_DATA_GAME(SP_RequestExitRoom, Key_RoomName);
+	}
+
+}
+void UUI_GamingPage::ReturnGaming()
+{
+	GameMenuPage->SetVisibility(ESlateVisibility::Hidden);
+}
+
+void UUI_GamingPage::UpdateRoomInfo(FString CurrentPlayerNumber)
+{
+	UChatOnLine_GameInstance* Instance = Cast<UChatOnLine_GameInstance>(GetGameInstance());
+	if (Instance)
+	{
+		FString RoomInfo, RoomName, RoomID;
+
+		RoomInfo = Instance->GetCurrentRoomInfo();
+
+		RoomInfo.Split("/",nullptr, &RoomInfo);
+
+		RoomInfo.Split("/", &RoomName, &RoomID);
+
+		TextRoomName->SetText(FText::FromString(RoomName));
+
+		TextRoomID->SetText(FText::FromString(RoomID));
+
+		TextPlyaerNumber->SetText(FText::FromString(CurrentPlayerNumber+"/20"));
 	}
 }

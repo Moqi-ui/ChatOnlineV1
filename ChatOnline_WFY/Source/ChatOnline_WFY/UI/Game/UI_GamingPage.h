@@ -10,6 +10,7 @@
  * 
  */
 class UTexture2D;
+
 class UBaseVoiceControlSystem;
 UCLASS()
 class CHATONLINE_WFY_API UUI_GamingPage : public UUI_CoreBase
@@ -37,6 +38,39 @@ class CHATONLINE_WFY_API UUI_GamingPage : public UUI_CoreBase
 	UPROPERTY(meta = (BindWidget))
 		class UImage* EarToReturn_Image;
 
+	UPROPERTY(meta = (BindWidget))
+		class UButton* RoomPageButton;
+
+	UPROPERTY(meta = (BindWidget))
+		class UButton* VoicePageButton;
+
+	UPROPERTY(meta = (BindWidget))
+		class UButton* SetingPageButton;
+
+	UPROPERTY(meta = (BindWidget))
+		class UButton* ExitRoom;
+
+	UPROPERTY(meta = (BindWidget))
+		class UButton* ExitGame;
+
+	UPROPERTY(meta = (BindWidget))
+		class UButton* ReturnGmaing;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* TextRoomName;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* TextRoomID;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* TextPlyaerNumber;
+
+	UPROPERTY(meta = (BindWidget))
+		class UCanvasPanel* GameMenuPage;
+
+	UPROPERTY(meta = (BindWidget))
+		class UWidgetSwitcher* GameSwitchPage;
+
 public:
 	virtual void NativeConstruct();
 
@@ -60,6 +94,28 @@ private:
 	UFUNCTION()
 	void OnClickEarToReturnButton();
 
+	UFUNCTION()
+	void SwitchRoomPage();
+
+	UFUNCTION()
+	void SwitchVoicePage();
+
+	UFUNCTION()
+	void SwitchSettingPage();
+
+	UFUNCTION()
+	void RequestExitRoom();
+
+	UFUNCTION()
+	void RequestExitGame();
+
+	UFUNCTION()
+	void ReturnGaming();
+
+private:
+
+	void UpdateRoomInfo(FString CurrentPlayerNumber);
+
 private:
 
 	UTexture2D* SpeackCheck;
@@ -76,4 +132,6 @@ private:
 	bool MicState = false;
 	bool SpeakerState = false;
 	bool EarState = false;
+
+	bool bIsExitGame = false;
 };

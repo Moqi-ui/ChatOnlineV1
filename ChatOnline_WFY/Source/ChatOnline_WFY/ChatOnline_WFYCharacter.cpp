@@ -129,8 +129,8 @@ void AChatOnline_WFYCharacter::SetupPlayerInputComponent(class UInputComponent* 
 	PlayerInputComponent->BindAxis("LookUpRate", this, &AChatOnline_WFYCharacter::LookUpAtRate);
 
 	// handle touch devices
-	PlayerInputComponent->BindTouch(IE_Pressed, this, &AChatOnline_WFYCharacter::TouchStarted);
-	PlayerInputComponent->BindTouch(IE_Released, this, &AChatOnline_WFYCharacter::TouchStopped);
+	//PlayerInputComponent->BindTouch(IE_Pressed, this, &AChatOnline_WFYCharacter::TouchStarted);
+	//PlayerInputComponent->BindTouch(IE_Released, this, &AChatOnline_WFYCharacter::TouchStopped);
 
 	// VR headset functionality
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &AChatOnline_WFYCharacter::OnResetVR);

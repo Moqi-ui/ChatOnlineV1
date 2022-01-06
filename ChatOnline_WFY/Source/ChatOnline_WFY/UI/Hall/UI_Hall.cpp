@@ -31,13 +31,11 @@ void UUI_Hall::NativeConstruct()
 	RoomPage->OnReleased.AddDynamic(this, &UUI_Hall::SwitchCreateRoomPage);
 	SerachRoom->OnReleased.AddDynamic(this, &UUI_Hall::SwiichSerachRoomPage);
 	CreateRoomButton->OnReleased.AddDynamic(this, &UUI_Hall::TryCreateRoom);
-	//JoinRoomButton->OnReleased.AddDynamic(this, &UUI_Hall::JoinCurrentSelectedRoom);
 	FindRoomButton->OnReleased.AddDynamic(this, &UUI_Hall::SerachCurrentRoom);
-
-	//GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Blue, "NativeConstruct()");
-
-	//InputRoomName = (SEditableTextBox*)GetWidgetFromName(TEXT("InputRoomName"));
-
+	ServerMap1Buuton->OnReleased.AddDynamic(this, &UUI_Hall::OnClickServerMapButton1);
+	ServerMap2Buuton->OnReleased.AddDynamic(this, &UUI_Hall::OnClickServerMapButton2);
+	ServerMap3Buuton->OnReleased.AddDynamic(this, &UUI_Hall::OnClickServerMapButton3);
+	LoadPage->SetVisibility(ESlateVisibility::Hidden);
 
 	//循环绑定 指导成功为止
 	BindClientRcv();
@@ -97,6 +95,7 @@ void UUI_Hall::RecvProtocol(uint32 ProtocolNumber, FSimpleChannel* Channel)
 			}
 			//FString URL = FString::Printf(TEXT("127.0.0.1:%s"),*Port);
 			FString URL = URLIP + ":" + Port;
+
 
 			//知识点：FString To FName  :  FName TestName = *URL;
 			UGameplayStatics::OpenLevel(GetWorld(), *URL);
@@ -163,16 +162,11 @@ void UUI_Hall::SwiichSerachRoomPage()
 }
 void UUI_Hall::TryCreateRoom()
 {
-	//FString RoomID = "9999";
 	FString RoomNameInfo = UserRoomName.ToString();
 
-	//RoomName = UserInputRoomName->GetText().ToString();
+	LoadPage->SetVisibility(ESlateVisibility::Visible);
 
-	SEND_DATA_Hall(SP_CreateRoom, RoomNameInfo)
-
-	
-	GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Blue, RoomNameInfo);
-
+	SEND_DATA_Hall(SP_CreateRoom, RoomNameInfo, ServerMapName)
 }
 void UUI_Hall::SerachCurrentRoom()
 {
@@ -263,4 +257,32 @@ void UUI_Hall::SetInputRoomName(FText tt)
 	///FText te = FText::FromString("fd");
 	UserRoomName = tt;
 	
+}
+
+void UUI_Hall::OnClickServerMapButton1()
+{
+	ServerMapName = "ZWB";
+	ResetButtonColor();
+	ServerMap1Buuton->SetBackgroundColor(FColor::FromHex("FFFFFFFF"));
+}
+
+void UUI_Hall::OnClickServerMapButton2()
+{
+	ServerMapName = "ServerMap02";
+	ResetButtonColor();
+	ServerMap2Buuton->SetBackgroundColor(FColor::FromHex("FFFFFFFF"));
+}
+
+void UUI_Hall::OnClickServerMapButton3()
+{
+	ServerMapName = "ServerMap03";
+	ResetButtonColor();
+	ServerMap3Buuton->SetBackgroundColor(FColor::FromHex("FFFFFFFF"));
+}
+
+void UUI_Hall::ResetButtonColor()
+{
+	ServerMap1Buuton->SetBackgroundColor(FColor::FromHex("2F2F2FFF"));
+	ServerMap2Buuton->SetBackgroundColor(FColor::FromHex("232323FF"));
+	ServerMap3Buuton->SetBackgroundColor(FColor::FromHex("232323FF"));
 }

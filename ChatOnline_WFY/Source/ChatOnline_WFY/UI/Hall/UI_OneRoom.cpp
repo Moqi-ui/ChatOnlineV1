@@ -42,7 +42,7 @@ void UUI_OneRoom::SetRoomInfo(FString ServerRoomInfo)
 	RoomID = RoomName;
 	RoomID.Split("/", &RoomName, &RoomID);
 
-	FString ShowInfo = FString::Printf(TEXT("RoomName:%s--RoomID:%s--Port:%s"), *RoomName, *RoomID, *RoomPort);
+	FString ShowInfo = FString::Printf(TEXT("Name:%s--ID:%s"), *RoomName, *RoomID);
 
 	FText text = FText::FromString(ShowInfo);
 

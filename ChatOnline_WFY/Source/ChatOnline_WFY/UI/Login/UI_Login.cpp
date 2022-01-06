@@ -95,7 +95,9 @@ bool UUI_Login::IsPasswordValid()
 void UUI_Login::LoginCallback()
 {
 	//openLevel
-	UGameplayStatics::OpenLevel(GetWorld(), FName(TEXT("150.158.18.192:7777")));
+	LoginMsg(TEXT("LoginSuccess"));
+	//TipText->SetVisibility(ESlateVisibility::Hidden);
+	UGameplayStatics::OpenLevel(GetWorld(), FName(TEXT("ThirdPersonExampleMap")));
 	//UGameplayStatics::OpenLevel(GetWorld(), FName(TEXT("127.0.0.1")));
 
 	//向服务端发送信息验证,通过后进入服务器列表状态
@@ -119,7 +121,7 @@ void UUI_Login::RecvProtocol(uint32 ProtocolNumber, FSimpleChannel* Channel)
 
 		SIMPLE_PROTOCOLS_RECEIVE(SP_LoginSuccess, GateInfos);
 
-		LoginMsg(TEXT("LoginSuccess"));
+		//LoginMsg(TEXT("LoginSuccess"));
 
 		//初始化服务器列表
 		//GetParents<UUI_LoginMain>()->AddSeverList(0, GateInfos);
@@ -133,12 +135,12 @@ void UUI_Login::RecvProtocol(uint32 ProtocolNumber, FSimpleChannel* Channel)
 	}
 	case SP_LoginFailed:
 	{
-		LoginMsg(TEXT("Login failed~"));
+		LoginMsg(TEXT("df"));
 		break;
 	}
 	case SP_Unregistered:
 	{
-		LoginMsg(TEXT("unregistered~"));
+		LoginMsg("SP_Unregistered");
 		break;
 	}
 	case SP_WrongPassword:
@@ -187,6 +189,7 @@ void UUI_Login::LoginMsg(FString Mes)
 {
 	if (TipText)
 	{
+		TipText->SetVisibility(ESlateVisibility::Visible);
 		TipText->SetText(FText::FromString(Mes));
 	}
 }

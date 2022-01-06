@@ -28,6 +28,9 @@ class UUI_Hall : public UUI_CoreBase
 		class UCanvasPanel* MenuPage;
 
 	UPROPERTY(meta = (BindWidget))
+		class UCanvasPanel* LoadPage;
+
+	UPROPERTY(meta = (BindWidget))
 		class UButton* QuitMenuButton;
 
 	UPROPERTY(meta = (BindWidget))
@@ -53,6 +56,15 @@ class UUI_Hall : public UUI_CoreBase
 
 	UPROPERTY(meta = (BindWidget))
 		class UButton* FindRoomButton;
+
+	UPROPERTY(meta = (BindWidget))
+		class UButton* ServerMap1Buuton;
+
+	UPROPERTY(meta = (BindWidget))
+		class UButton* ServerMap2Buuton;
+
+	UPROPERTY(meta = (BindWidget))
+		class UButton* ServerMap3Buuton;
 
 	//UPROPERTY(meta = (BindWidget))
 		//class UTextBlock* UserInputRoomName;
@@ -98,17 +110,30 @@ private:
 	UFUNCTION()
 	void JoinCurrentSelectedRoom(FString HandleRoomInfo);
 
+	UFUNCTION()
+		void OnClickServerMapButton1();
+
+	UFUNCTION()
+		void OnClickServerMapButton2();
+
+	UFUNCTION()
+		void OnClickServerMapButton3();
+
 private:
 
 	void CreateRoomWidget(FString ServerNameInfo);
 
 	void AnalysisString(FString Str);
 
+	void ResetButtonColor();
+
 private:
 
 	TArray<FString> ServerRooms;
 
 	FText UserRoomName;
+
+	FString ServerMapName = "ZWB";
 
 };
 

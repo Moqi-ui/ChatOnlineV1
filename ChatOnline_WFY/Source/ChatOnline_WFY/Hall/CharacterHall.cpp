@@ -131,8 +131,8 @@ void ACharacterHall::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAxis("LookUpRate", this, &ACharacterHall::LookUpAtRate);
 
 	// handle touch devices
-	PlayerInputComponent->BindTouch(IE_Pressed, this, &ACharacterHall::TouchStarted);
-	PlayerInputComponent->BindTouch(IE_Released, this, &ACharacterHall::TouchStopped);
+	//PlayerInputComponent->BindTouch(IE_Pressed, this, &ACharacterHall::TouchStarted);
+	//PlayerInputComponent->BindTouch(IE_Released, this, &ACharacterHall::TouchStopped);
 
 	// VR headset functionality
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &ACharacterHall::OnResetVR);
