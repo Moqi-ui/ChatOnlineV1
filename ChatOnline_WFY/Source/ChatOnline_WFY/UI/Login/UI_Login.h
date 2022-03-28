@@ -42,8 +42,17 @@ class UUI_Login : public UUI_CoreBase
 		class UTextBlock* TipText;
 
 	//登陆信息
+	//UPROPERTY(meta = (BindWidget))
+		//class UTextBlock* LoginMes;
+
 	UPROPERTY(meta = (BindWidget))
-		class UTextBlock* LoginMes;
+		class UCheckBox* bIsRemberPassword;
+
+	UPROPERTY(meta = (BindWidget))
+		class UButton* Eye_ShowPassword;
+	
+	UPROPERTY(meta = (BindWidget))
+		class UButton* ExitGame;
 
 public:
 
@@ -65,13 +74,32 @@ public:
 	UFUNCTION()
 	void SignUpGame();
 
-	//提示错误信息
-	void LoginMsg(FString Mes);
+	UFUNCTION()
+	void ShowPassWord();
 
-	void LoginCallback();
+	UFUNCTION()
+	void HidePassWord();
+
+	UFUNCTION()
+	void SaveGame();
+
+	UFUNCTION()
+	void LoadGame();
+
+	UFUNCTION()
+	void TryExitGame();
+
+	//提示错误信息
+	void LoginMsg(FText Mes);
+
+	void LoginCallback(FString UserInfo);
 
 	void BindClientRcv();
 
 	virtual void RecvProtocol(uint32 ProtocolNumber, FSimpleChannel* Channel);
+
+private:
+
+	bool bIsRemberMe = false;
 };
 

@@ -6,11 +6,14 @@
 #include "Engine/GameInstance.h"
 #include "Tickable.h"
 //#include "BaseVoiceControlSystem.h"
+#include "../User/UserInfo.h"
 #include "ChatOnLine_GameInstance.generated.h"
 
 /**
  * 
  */
+//struct FUserInfo;
+
 UCLASS()
 class CHATONLINE_WFY_API UChatOnLine_GameInstance : public UGameInstance, public FTickableGameObject
 {
@@ -49,8 +52,13 @@ public:
 
 	FString GetCurrentRoomInfo() { return Key_CurrentRoomInfo; };
 
-	//UBaseVoiceControlSystem* GetVoiceControlSystem() { return VoiceControlSystem; };
+	FORCEINLINE FUserInfo GetUserInfo() { return CurrentUserInfo; };
 
+	void SetUserSpeakerState(bool State);
+
+	FORCEINLINE bool GetUserSpeakerState() { return bUserSpeakState; };
+
+	void SetUserInfo(FUserInfo userInfo);
 protected:
 
 	//UBaseVoiceControlSystem* VoiceControlSystem;
@@ -66,4 +74,8 @@ private:
 	FString RoomID;
 
 	FString UserID;
+
+	FUserInfo CurrentUserInfo;
+
+	bool bUserSpeakState;
 };

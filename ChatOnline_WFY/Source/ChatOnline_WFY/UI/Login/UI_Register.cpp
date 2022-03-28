@@ -20,6 +20,8 @@ void UUI_Register::NativeConstruct()
 	RegisterButton->OnReleased.AddDynamic(this, &UUI_Register::SendPlayerRegisterToServer);
 	ReturnMainPage->OnReleased.AddDynamic(this, &UUI_Register::TurnOffRegisterUI);
 	GetVCodeBuuton->OnReleased.AddDynamic(this, &UUI_Register::TrySendVerification);
+	LoginIn->OnReleased.AddDynamic(this, &UUI_Register::TurnOffRegisterUI);
+	
 
 	BindClientRcv();
 }
@@ -156,6 +158,10 @@ void UUI_Register::TrySendVerification()
 {
 	//×¢²áÐÅÏ¢
 	FString userPhone = UserPhone->GetText().ToString();
+
+
+
+	//countDown->SetText(LocalText);
 	if (VerifyInputPhone(userPhone))
 	{
 		SEND_DATA(SP_TryGetVerification, userPhone)

@@ -7,6 +7,7 @@
 #include "ChatOnline_WFYCharacter.generated.h"
 
 class FSimpleNetManage;
+class UUI_TopTitle;
 
 UCLASS(config=Game)
 class AChatOnline_WFYCharacter : public ACharacter
@@ -20,6 +21,12 @@ class AChatOnline_WFYCharacter : public ACharacter
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
+
+	//UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class UWidgetComponent* TopTitel;
+
+
 public:
 	AChatOnline_WFYCharacter();
 
@@ -32,6 +39,8 @@ public:
 	float BaseLookUpRate;
 
 	FSimpleNetManage* GetClient();
+
+	//FORCEINLINE UUI_TopTitle* GetTopTitle() { return pTopTitle; };
 
 protected:
 
@@ -81,6 +90,10 @@ protected:
 	int PlayerNumbers = 0;
 
 	FSimpleNetManage* ClientGaming;
+
+private:
+	//UPROPERTY()
+	//UUI_TopTitle* pTopTitle;
 
 public:
 	/** Returns CameraBoom subobject **/

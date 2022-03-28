@@ -59,6 +59,12 @@ class UUI_Register : public UUI_CoreBase
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock *Prompt;
 
+	UPROPERTY(meta = (BindWidget))
+	class UButton* LoginIn;
+
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* countDown;
+
 public:
 
 	virtual void NativeConstruct();

@@ -12,6 +12,7 @@
 class UTexture2D;
 
 class UBaseVoiceControlSystem;
+class AChatOnline_WFYCharacter;
 UCLASS()
 class CHATONLINE_WFY_API UUI_GamingPage : public UUI_CoreBase
 {
@@ -71,10 +72,17 @@ class CHATONLINE_WFY_API UUI_GamingPage : public UUI_CoreBase
 	UPROPERTY(meta = (BindWidget))
 		class UWidgetSwitcher* GameSwitchPage;
 
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* PlayerLocationDebug;
+
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* PlayerUpdateDebug;
 public:
 	virtual void NativeConstruct();
 
 	virtual void NativeDestruct();
+
+	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime);
 
 	void BindClientRcv();
 
@@ -116,16 +124,28 @@ private:
 
 	void UpdateRoomInfo(FString CurrentPlayerNumber);
 
+	//FVector GetPa
+
 private:
 
+	//UPROPERTY()
 	UTexture2D* SpeackCheck;
+
+	//UPROPERTY()
 	UTexture2D* SpeackUncheck;
+
+	//UPROPERTY()
 	UTexture2D* MicCheck;
+
+	//UPROPERTY()
 	UTexture2D* MicUncheck;
 
+	//U类必须用UPROPERTY()标记，否则会被GC回收掉。
 	UPROPERTY()
 	UBaseVoiceControlSystem* BaseVoiceControl;
 	//UTexture2D* SpeackCheck;
+
+	//AChatOnline_WFYCharacter* InCharacterGaming;
 
 	FString UserID;
 

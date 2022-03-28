@@ -14,6 +14,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "WidgetComponent.h"
+#include "../UI/Common/UI_TopTitle.h"
 
 // Sets default values
 ACharacterHall::ACharacterHall()
@@ -22,6 +24,21 @@ ACharacterHall::ACharacterHall()
 	PrimaryActorTick.bCanEverTick = true;
 
 	ClientHall = NULL;
+
+	//USkeletalMesh* HallMesh = LoadObject<USkeletalMesh>(nullptr, TEXT("/Game/Kaoru/Meshes/SM_Kaoru_Student"));
+
+	//未能成功记载动画
+	//UAnimInstance* AnimIns = LoadObject<UAnimInstance>(nullptr, TEXT("/Game/Kaoru/Anima/AnimaBPkaoru_C"));
+	//static ConstructorHelpers::FObjectFinder<USkeletalMesh> HallMesh2(TEXT("/Game/Kaoru/Meshes/SM_Kaoru_Student"));
+	
+	//加载Widget的方法一
+	//static ConstructorHelpers::FClassFinder<UUserWidget> TopTitle2(TEXT("/Game/ChatOnline/WFY_Widget/Common/CharacterTopTitle.CharacterTopTitle_C"));
+	//加载Widget的方法二
+	//TSubclassOf<UUserWidget>TopTitle = LoadClass<UUserWidget>(this, TEXT("/Game/ChatOnline/WFY_Widget/Common/CharacterTopTitle.CharacterTopTitle_C"));
+	//TSubclassOf<UUI_TopTitle> TopTitle = LoadClass<UUI_TopTitle>(this, TEXT("/Game/ChatOnline/WFY_Widget/Common/CharacterTopTitle.CharacterTopTitle_C"));
+	//pTopTitle = CreateWidget<UUI_TopTitle>(GetWorld(), TopTitle);
+	//这种方法不行
+	//UUserWidget* TopTitle3 = LoadObject<UUserWidget>(this, TEXT("/Game/ChatOnline/WFY_Widget/Common/CharacterTopTitle"));
 
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -51,10 +68,16 @@ ACharacterHall::ACharacterHall()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
-
+	//GetMesh()->SetSkeletalMesh(HallMesh);
+	//GetMesh()->SetAnimClass(AnimIns->StaticClass());
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
-
+	ShowWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("ShowWidget"));
+	ShowWidget->SetupAttachment(RootComponent);
+	//ShowWidget->SetWidgetClass(TopTitle);
+	//ShowWidget->SetWidget(pTopTitle);
+	//ShowWidget->SetTwoSided(true);
+	//ShowWidget->SetWidgetClass(TopTitle2.Class);
 }
 
 FSimpleNetManage* ACharacterHall::GetClient()
@@ -67,6 +90,10 @@ void ACharacterHall::BeginPlay()
 {
 	Super::BeginPlay();
 
+	//TopTitle->SetTextTitle("dfdss");
+	//pTopTitle->SetTitle("myname");
+
+	//ShowWidget->SetWidget(pTopTitle);
 	//2.初始化配置表
 	FSimpleNetGlobalInfo::Get()->Init();//初始化我们通道
 

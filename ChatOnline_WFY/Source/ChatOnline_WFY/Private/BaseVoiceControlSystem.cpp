@@ -116,6 +116,46 @@ void UBaseVoiceControlSystem::EarToReturn(bool icChecked)
 	ITMGContextGetInstance()->GetAudioCtrl()->EnableLoopBack(icChecked);
 }
 
+void UBaseVoiceControlSystem::TrySetRangeAudioTeamID(int TeamID)
+{
+	ITMGContextGetInstance()->SetRangeAudioTeamID(TeamID);
+
+	FString ID = FString::Printf(TEXT("TeamID = %d"), TeamID);
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, ID);
+}
+
+void UBaseVoiceControlSystem::TrySetRangeAudioMode()
+{
+	ITMGContextGetInstance()->SetRangeAudioMode(ITMG_RANGE_AUDIO_MODE::ITMG_RANGE_AUDIO_MODE_WORLD);
+}
+void UBaseVoiceControlSystem::UpdatePosition(FVector cameraLocation, FRotator cameraRotation, FString& msg)
+{
+	ITMGRoom* pTmgRoom = ITMGContextGetInstance()->GetRoom();
+
+	if (!pTmgRoom)
+	{
+		return;
+	}
+	pTmgRoom->UpdateAudioRecvRange(1000);
+
+	//FVector cameraLocation = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetCameraLocation();
+	//FRotator cameraRotation = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetCameraRotation();
+	int position[] = { (int)cameraLocation.X,(int)cameraLocation.Y, (int)cameraLocation.Z };
+	FMatrix matrix = ((FRotationMatrix)cameraRotation);
+	float forward[] = { matrix.GetColumn(0).X,matrix.GetColumn(1).X,matrix.GetColumn(2).X };
+	float right[] = { matrix.GetColumn(0).Y,matrix.GetColumn(1).Y,matrix.GetColumn(2).Y };
+	float up[] = { matrix.GetColumn(0).Z,matrix.GetColumn(1).Z,matrix.GetColumn(2).Z };
+
+	pTmgRoom->UpdateSelfPosition(position, forward, right, up);
+
+	msg = FString::Printf(TEXT("location(x=%.2f,y=%.2f,z=%.2f),  rotation(pitch=%.2f,yaw=%.2f,roll=%.2f)"),
+		cameraLocation.X, cameraLocation.Y, cameraLocation.Z, cameraRotation.Pitch, cameraRotation.Yaw, cameraRotation.Roll);
+
+	//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, msg);
+}
+
+
 void UBaseVoiceControlSystem::OnEvent(ITMG_MAIN_EVENT_TYPE eventType, const char* data)
 {
 	FString jsonData = FString(UTF8_TO_TCHAR(data));
@@ -143,7 +183,35 @@ void UBaseVoiceControlSystem::OnEvent(ITMG_MAIN_EVENT_TYPE eventType, const char
 			GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.0f, FColor::Yellow, TEXT("Exit room success!!!."));
 			break;
 		}
-
+		case ITMG_MAIN_EVNET_TYPE_USER_UPDATE:
+		{
+			int32 eventID = JsonObject->GetIntegerField(TEXT("event_id"));
+			TArray<TSharedPtr<FJsonValue>> UserList = JsonObject->GetArrayField(TEXT("user_list"));
+			switch (eventID)
+			{
+				case ITMG_EVENT_ID_USER_ENTER:
+				{
+					UserUpdateEventId = ITMG_EVENT_ID_USER_ENTER;
+					break;
+				}
+				case ITMG_EVENT_ID_USER_EXIT:
+				{
+					UserUpdateEventId = ITMG_EVENT_ID_USER_EXIT;
+					break;
+				}
+				case ITMG_EVENT_ID_USER_HAS_AUDIO:
+				{
+					UserUpdateEventId = ITMG_EVENT_ID_USER_HAS_AUDIO;
+					break;
+				}
+				case ITMG_EVENT_ID_USER_NO_AUDIO:
+				{
+					//有成员停止发送音频包
+					UserUpdateEventId = ITMG_EVENT_ID_USER_NO_AUDIO;
+					break;
+				}
+			}
+		}
 	}
 	//if (eventType == ITMG_MAIN_EVENT_TYPE_ENTER_ROOM) {
 	//	

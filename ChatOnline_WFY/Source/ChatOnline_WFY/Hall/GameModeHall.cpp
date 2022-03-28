@@ -10,10 +10,11 @@ AGameModeHall::AGameModeHall()
 {
 
 	struct ConstructorHelpers::FClassFinder<ACharacter> CharacterHall (TEXT("/Game/ChatOnline/WFY_Blueprint/Hall/BP_CharacterHall"));
-
+	//DefaultPawnClass = ACharacterHall::StaticClass();
 	if (CharacterHall.Class != NULL)
 	{
 		DefaultPawnClass = CharacterHall.Class;
+		//CharacterHall.Class->FindFunctionByName(TEXT("Set"));
 	}
 	else
 	{
@@ -25,8 +26,8 @@ void AGameModeHall::BeginPlay()
 {
 	Super::BeginPlay();
 
-
-
+	//UFunction* fun = DefaultPawnClass->FindFunctionByName(FName(TEXT("SetTopTitle")));
+	//DefaultPawnClass->CallFunction();
 }
 
 void AGameModeHall::Tick(float DeltaTime)

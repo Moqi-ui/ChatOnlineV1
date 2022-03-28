@@ -6,11 +6,14 @@
 #include "Components/Button.h"
 #include "UI_LoginMain.h"
 #include "Components/TextBlock.h"
+#include "Components/CheckBox.h"
 #include "../Core/UI_CoreMacro.h"
 #include "ThreadManage.h"
 #include "../../MobyGameType.h"
-//#include <Engine/Engine.h>
 #include <Kismet/GameplayStatics.h>
+#include "Gaming/COL_SaveGame.h"
+#include "Gaming/ChatOnLine_GameInstance.h"
+#define LOCTEXT_NAMESPACE "UUI_Login"
 
 void UUI_Login::BindClientRcv()
 {
@@ -36,9 +39,14 @@ void UUI_Login::NativeConstruct()
 
 	SignInButton->OnReleased.AddDynamic(this, &UUI_Login::SignInGame);
 	SignUpButton->OnReleased.AddDynamic(this, &UUI_Login::SignUpGame);
-
-	//ѭ���� ָ���ɹ�Ϊֹ
+	Eye_ShowPassword->OnPressed.AddDynamic(this,&UUI_Login::ShowPassWord);
+	Eye_ShowPassword->OnReleased.AddDynamic(this, &UUI_Login::HidePassWord);
+	ExitGame->OnReleased.AddDynamic(this, &UUI_Login::TryExitGame);
+	//SaveButton->OnReleased.AddDynamic(this, &UUI_Login::SaveGame);
+	//LoadButton->OnReleased.AddDynamic(this, &UUI_Login::LoadGame);
+	//循环绑定 指导成功为止
 	BindClientRcv();
+	LoadGame();
 }
 
 void UUI_Login::NativeDestruct()
@@ -50,20 +58,14 @@ bool UUI_Login::IsAccountValid()
 {
 	bool bIsValid = false;
 
-	if (Account)
+	if (Account->GetText().ToString().Len() >= 6)
 	{
-		if (Account->GetText().ToString().Len() >= 6)
-		{
-			bIsValid = true;
-		}
-		else
-		{
-			LoginMsg("Accounts need to be greater than or equal to 6 bits.");
-		}
+		bIsValid = true;
 	}
 	else
 	{
-		LoginMsg("Account Instance non-existent.");
+		FText text = FText(LOCTEXT("myText", "账号长度少于6位"));
+		LoginMsg(text);
 	}
 
 	return bIsValid;
@@ -73,34 +75,35 @@ bool UUI_Login::IsPasswordValid()
 {
 	bool bIsValid = false;
 
-	if (Password)
+	if (Password->GetText().ToString().Len() >= 6)
 	{
-		if (Password->GetText().ToString().Len() >= 6)
-		{
-			bIsValid = true;
-		}
-		else
-		{
-			LoginMsg("Password need to be greater than or equal to 6 bits.");
-		}
+		bIsValid = true;
 	}
 	else
 	{
-		LoginMsg("Password Instance non-existent.");
+		FText text = FText(LOCTEXT("myText", "密码长度少于6位"));
+		LoginMsg(text);
 	}
 
 	return bIsValid;
 }
 
-void UUI_Login::LoginCallback()
+void UUI_Login::LoginCallback(FString UserInfo)
 {
-	//openLevel
-	LoginMsg(TEXT("LoginSuccess"));
-	//TipText->SetVisibility(ESlateVisibility::Hidden);
+	FText text = FText(LOCTEXT("myText", "登录成功，正在进入···"));
+	LoginMsg(text);
+	SaveGame();
 	UGameplayStatics::OpenLevel(GetWorld(), FName(TEXT("ThirdPersonExampleMap")));
-	//UGameplayStatics::OpenLevel(GetWorld(), FName(TEXT("127.0.0.1")));
 
-	//�����˷�����Ϣ��֤,ͨ�������������б�״̬
+	UChatOnLine_GameInstance* GameInstance = Cast<UChatOnLine_GameInstance>(GetGameInstance());
+
+	FUserInfo userInfo;
+
+	userInfo.userName = UserInfo;
+
+	GameInstance->SetUserInfo(userInfo);
+
+	//向服务端发送信息验证,通过后进入服务器列表状态
 	/*if (1)
 	{
 		if (GetParents<UUI_LoginMain>())
@@ -114,45 +117,41 @@ void UUI_Login::RecvProtocol(uint32 ProtocolNumber, FSimpleChannel* Channel)
 {
 	switch (ProtocolNumber)
 	{
-	case SP_LoginSuccess:
-	{
-		LoginCallback();
-		TArray<FGateInfo> GateInfos;
-
-		SIMPLE_PROTOCOLS_RECEIVE(SP_LoginSuccess, GateInfos);
-
-		//LoginMsg(TEXT("LoginSuccess"));
-
-		//��ʼ���������б�
-		//GetParents<UUI_LoginMain>()->AddSeverList(0, GateInfos);
-
-		//�ͷ��Լ�
-		/*if (Channel)
+		case SP_LoginSuccess:
 		{
-			Channel->DestroySelf();
-		}*/
-		break;
-	}
-	case SP_LoginFailed:
-	{
-		LoginMsg(TEXT("df"));
-		break;
-	}
-	case SP_Unregistered:
-	{
-		LoginMsg("SP_Unregistered");
-		break;
-	}
-	case SP_WrongPassword:
-	{
-		LoginMsg(TEXT("Wrong password~"));
-		break;
-	}
-	case SP_RegisteredSuccess:
-	{
-		LoginMsg(TEXT("RegisteredSuccess"));
-		break;
-	}
+			TArray<FGateInfo> GateInfos;
+			FString userName;
+			SIMPLE_PROTOCOLS_RECEIVE(SP_LoginSuccess, userName, GateInfos);
+			LoginCallback(userName);
+			//初始化服务器列表
+			//GetParents<UUI_LoginMain>()->AddSeverList(0, GateInfos);
+
+			//释放自己
+			/*if (Channel)
+			{
+				Channel->DestroySelf();
+			}*/
+			break;
+		}
+		case SP_LoginFailed:
+		{
+			//LoginMsg(TEXT("df"));
+			FText text = FText(LOCTEXT("myText", "登录失败"));
+			LoginMsg(text);
+			break;
+		}
+		case SP_Unregistered:
+		{
+			FText text = FText(LOCTEXT("myText", "手机号未注册"));
+			LoginMsg(text);
+			break;
+		}
+		case SP_WrongPassword:
+		{
+			FText text = FText(LOCTEXT("myText", "密码错误"));
+			LoginMsg(text);
+			break;
+		}
 	}
 }
 
@@ -172,7 +171,7 @@ void UUI_Login::SignInGame()
 		}
 	}
 
-	//����ҡͷ����
+	//播放摇头动画
 	// play the shaking head animation.
 	//PlayAnimation(GetNameWidgetAnimation(TEXT("TipAnimation")));
 }
@@ -184,12 +183,68 @@ void UUI_Login::SignUpGame()
 		GetParents<UUI_LoginMain>()->OpenRegisterUI();
 	}
 }
+void UUI_Login::ShowPassWord()
+{
+	FButtonStyle style;
+	FSlateBrush Buresh;
+	auto ddd = Buresh.GetResourceName();
+	//style.SetNormal();
+	//Eye_ShowPassword->SetStyle();
+	Password->SetIsPassword(false);
+}
 
-void UUI_Login::LoginMsg(FString Mes)
+void UUI_Login::HidePassWord()
+{
+	Password->SetIsPassword(true);
+}
+
+void UUI_Login::TryExitGame()
+{
+	//UGameplayStatics::com
+	GetWorld()->GetFirstPlayerController()->ConsoleCommand("QUIT");
+}
+
+void UUI_Login::LoginMsg(FText Mes)
 {
 	if (TipText)
 	{
 		TipText->SetVisibility(ESlateVisibility::Visible);
-		TipText->SetText(FText::FromString(Mes));
+		TipText->SetText(Mes);
 	}
 }
+void UUI_Login::SaveGame()
+{
+	if (UCOL_SaveGame* SaveGameInstance = Cast<UCOL_SaveGame>(UGameplayStatics::CreateSaveGameObject(UCOL_SaveGame::StaticClass())))
+	{
+		// 设置savegame对象上的数据。
+		SaveGameInstance->PlayerAccount = Account->GetText().ToString();
+		bIsRemberMe = bIsRemberPassword->IsChecked();
+		if (bIsRemberMe)
+		{
+			SaveGameInstance->PlayerPassword = Password->GetText().ToString();
+
+			SaveGameInstance->bIsRemberMe = bIsRemberMe;
+		}
+
+		// 即时保存游戏。
+		UGameplayStatics::SaveGameToSlot(SaveGameInstance, SaveGameInstance->SaveSlotName, 0);
+	}
+}
+void UUI_Login::LoadGame()
+{
+	// 检索并将USaveGame对象投射到UMySaveGame。
+	if (UCOL_SaveGame* LoadedGame = Cast<UCOL_SaveGame>(UGameplayStatics::LoadGameFromSlot("LoginSaveSlot", 0)))
+	{
+		Account->SetText(FText::FromString(LoadedGame->PlayerAccount));
+		Password->SetText(FText::FromString(LoadedGame->PlayerPassword));
+		if (LoadedGame->bIsRemberMe)
+		{
+			bIsRemberPassword->SetCheckedState(ECheckBoxState::Checked);
+		}
+		else
+		{
+			bIsRemberPassword->SetCheckedState(ECheckBoxState::Unchecked);
+		}
+	}
+}
+#undef LOCTEXT_NAMESPACE

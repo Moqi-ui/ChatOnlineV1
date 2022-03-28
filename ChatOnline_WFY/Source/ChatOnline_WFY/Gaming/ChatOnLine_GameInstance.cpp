@@ -5,8 +5,6 @@
 //#include "Kismet/GameplayStatics.h"
 #include "Engine/Engine.h"
 
-
-
 void UChatOnLine_GameInstance::Init()
 {
 	Super::Init();
@@ -65,4 +63,13 @@ void UChatOnLine_GameInstance::ReduceOnePlayerNumbers()
 void UChatOnLine_GameInstance::SetCurrentRoomInfo(FString Key_RoomInfo)
 {
 	Key_CurrentRoomInfo = Key_RoomInfo;
+}
+void UChatOnLine_GameInstance::SetUserSpeakerState(bool State)
+{
+	bUserSpeakState = State;
+}
+
+void UChatOnLine_GameInstance::SetUserInfo(FUserInfo userInfo)
+{
+	CurrentUserInfo = userInfo;
 }

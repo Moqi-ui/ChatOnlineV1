@@ -15,6 +15,8 @@
 #include "Components/TextBlock.h"
 #include "Components/CanvasPanel.h"
 #include "Components/WidgetSwitcher.h"
+#include "Math.h"
+//#include "../Common/UI_TopTitle.h"
 
 void UUI_GamingPage::NativeConstruct()
 {
@@ -57,7 +59,20 @@ void UUI_GamingPage::NativeConstruct()
 				RoomID.Split("/", nullptr, &RoomID);
 			}
 		}
+
+		int uid = rand() % 10000 + 10000;
+		BaseVoiceControl->TrySetRangeAudioTeamID(uid);
+		BaseVoiceControl->TrySetRangeAudioMode();
 		BaseVoiceControl->EnterRoom(RoomID, ITMG_ROOM_TYPE::ITMG_ROOM_TYPE_FLUENCY);
+
+		/*GetCurrentPawn<AChatOnline_WFYCharacter>()
+		和Cast<AChatOnline_WFYCharacter>(GetWorld()->GetPlyaerController()->GetPawn());等效，前者为模板运用*/
+		//AChatOnline_WFYCharacter* InCharacterGaming = GetCurrentPawn<AChatOnline_WFYCharacter>();
+		//if (InCharacterGaming)
+		//{
+		//	FString UserName = Instance->GetUserInfo().userName;
+		//	//InCharacterGaming->GetTopTitle()->SetTitle(UserName);
+		//}
 	}
 
 	BindClientRcv();
@@ -68,6 +83,52 @@ void UUI_GamingPage::NativeDestruct()
 	Super::NativeDestruct();
 
 
+}
+
+void UUI_GamingPage::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
+{
+	Super::NativeTick(MyGeometry, InDeltaTime);
+	if (BaseVoiceControl && GetWorld())
+	{
+		//Get
+		FString msg;
+		FVector location = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)->GetActorLocation();
+		FRotator Rotator = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)->GetActorRotation();
+		BaseVoiceControl->UpdatePosition(location, Rotator, msg);
+
+		int32 eventId = BaseVoiceControl->GetUserState();
+		UChatOnLine_GameInstance* Instance = Cast<UChatOnLine_GameInstance>(GetGameInstance());
+
+		switch (eventId)
+		{
+			case ITMG_EVENT_ID_USER_ENTER:
+			{
+				PlayerUpdateDebug->SetText(FText::FromString("UserEnter"));
+				break;
+			}
+			case ITMG_EVENT_ID_USER_EXIT:
+			{
+				PlayerUpdateDebug->SetText(FText::FromString("UserExit"));
+				break;
+			}
+			case ITMG_EVENT_ID_USER_HAS_AUDIO:
+			{
+				Instance->SetUserSpeakerState(true);
+				PlayerUpdateDebug->SetText(FText::FromString("UserSpeaking"));
+				break;
+			}
+			case ITMG_EVENT_ID_USER_NO_AUDIO:
+			{
+				//有成员停止发送音频包
+				PlayerUpdateDebug->SetText(FText::FromString("UserNOSpeake"));
+				Instance->SetUserSpeakerState(false);
+				break;
+			}
+		}
+
+		PlayerLocationDebug->SetText(FText::FromString(msg));
+		//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Blue, "TestTick");
+	}
 }
 
 void UUI_GamingPage::BindClientRcv()

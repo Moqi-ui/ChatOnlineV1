@@ -7,6 +7,7 @@
 #include "CharacterHall.generated.h"
 
 class FSimpleNetManage;
+class UUI_TopTitle;
 UCLASS()
 class CHATONLINE_WFY_API ACharacterHall : public ACharacter
 {
@@ -19,6 +20,9 @@ class CHATONLINE_WFY_API ACharacterHall : public ACharacter
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class UCameraComponent* FollowCamera;
+
+	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
+		class UWidgetComponent* ShowWidget;
 
 public:
 	// Sets default values for this character's properties
@@ -85,4 +89,7 @@ public:
 protected:
 
 	FSimpleNetManage* ClientHall;
+
+	//TSubclassOf<ULoadingProgressBar> TopTitle;
+	//UUI_TopTitle* pTopTitle;
 };

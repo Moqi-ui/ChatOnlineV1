@@ -46,6 +46,13 @@ public:
 	//ÆôÓÃ¶ú·µ
 	void EarToReturn(bool icChecked);
 
+	void TrySetRangeAudioTeamID(int TeamID);
+
+	void TrySetRangeAudioMode();
+
+	void UpdatePosition(FVector cameraLocation, FRotator cameraRotation, FString& msg);
+
+	FORCEINLINE int32 GetUserState() { return UserUpdateEventId; };
 
 private:
 
@@ -55,4 +62,6 @@ private:
 
 	FString UserId;
 	
+	int32 UserUpdateEventId;
+
 };

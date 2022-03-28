@@ -15,6 +15,8 @@
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "UI/Core/UI_CoreMacro.h"
+#include "Components/WidgetComponent.h"
+#include "../UI/Common/UI_TopTitle.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AChatOnline_WFYCharacter
@@ -23,6 +25,15 @@ AChatOnline_WFYCharacter::AChatOnline_WFYCharacter()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
+
+	//USkeletalMesh* PlayerMesh = LoadObject<USkeletalMesh>(nullptr, TEXT("/Game/Kaoru/Meshes/SM_Kaoru"));
+	//TSubclassOf<UUI_TopTitle> TopTitlef = LoadClass<UUI_TopTitle>(nullptr, TEXT("/Game/ChatOnline/WFY_Widget/Common/CharacterTopTitle.CharacterTopTitle_C"));
+	
+	//static ConstructorHelpers::FClassFinder<UUI_TopTitle> TopTitlef(TEXT("/Game/ChatOnline/WFY_Widget/Common/CharacterTopTitle.CharacterTopTitle_C"));
+
+	//UUI_TopTitle* pTopTitle = CreateWidget<UUI_TopTitle>(GetWorld(), TopTitlef.Class);
+
+	//GetMesh()->SetSkeletalMesh(PlayerMesh);
 
 	// set our turn rates for input
 	BaseTurnRate = 45.f;
@@ -52,14 +63,20 @@ AChatOnline_WFYCharacter::AChatOnline_WFYCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
+	TopTitel = CreateDefaultSubobject<UWidgetComponent>(TEXT("TopTitle"));
+	TopTitel->SetupAttachment(RootComponent);
+	//TopTitel->SetWidgetClass(TopTitlef);
+	//TopTitlef.Get()->
+	//TopTitel->GetWidgetClass();
+	//TopTitel->SetWidget(pTopTitle);
 }
 
 void AChatOnline_WFYCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	PlayerNumbers++;
-	UE_LOG(LogTemp, Warning, TEXT("UE_LOG:AChatOnline_WFYCharacter::BeginPlay()::Player:%d"), PlayerNumbers);
+
+	//TopTitel->GetUserWidgetObject();
 
 	//2.初始化配置表
 	FSimpleNetGlobalInfo::Get()->Init();//初始化我们通道

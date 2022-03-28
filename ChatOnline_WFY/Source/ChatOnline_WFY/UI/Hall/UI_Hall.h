@@ -40,7 +40,19 @@ class UUI_Hall : public UUI_CoreBase
 		class UButton* SerachRoom;
 
 	UPROPERTY(meta = (BindWidget))
+		class UButton* SelectCharacter;
+
+	UPROPERTY(meta = (BindWidget))
+		class UButton* Setting;
+
+	UPROPERTY(meta = (BindWidget))
 		class UButton* CreateRoomButton;
+
+	UPROPERTY(meta = (BindWidget))
+		class UButton* LogOut;
+
+	UPROPERTY(meta = (BindWidget))
+		class UButton* ExitGame;
 
 	/*UPROPERTY(meta = (BindWidget))
 		class UButton* JoinRoomButton;*/
@@ -48,8 +60,8 @@ class UUI_Hall : public UUI_CoreBase
 	UPROPERTY(meta = (BindWidget))
 		class UWidgetSwitcher* MenuSwitcher;
 
-	UPROPERTY(meta = (BindWidget))
-		class UCircularThrobber* SerachCircularThrobber;
+	/*UPROPERTY(meta = (BindWidget))
+		class UCircularThrobber* SerachCircularThrobber;*/
 
 	UPROPERTY(meta = (BindWidget))
 		class UScrollBox* ScrollRoomList;
@@ -65,6 +77,8 @@ class UUI_Hall : public UUI_CoreBase
 
 	UPROPERTY(meta = (BindWidget))
 		class UButton* ServerMap3Buuton;
+
+
 
 	//UPROPERTY(meta = (BindWidget))
 		//class UTextBlock* UserInputRoomName;
@@ -118,6 +132,18 @@ private:
 
 	UFUNCTION()
 		void OnClickServerMapButton3();
+
+	UFUNCTION()
+		void SwitchCharacterPage();
+
+	UFUNCTION()
+		void SwitchSettingPage();
+
+	UFUNCTION()
+		void TryLogOut();
+
+	UFUNCTION()
+		void TryExitGame();
 
 private:
 

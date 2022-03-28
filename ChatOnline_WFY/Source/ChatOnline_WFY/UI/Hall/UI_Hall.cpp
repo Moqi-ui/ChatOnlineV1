@@ -35,6 +35,10 @@ void UUI_Hall::NativeConstruct()
 	ServerMap1Buuton->OnReleased.AddDynamic(this, &UUI_Hall::OnClickServerMapButton1);
 	ServerMap2Buuton->OnReleased.AddDynamic(this, &UUI_Hall::OnClickServerMapButton2);
 	ServerMap3Buuton->OnReleased.AddDynamic(this, &UUI_Hall::OnClickServerMapButton3);
+	SelectCharacter->OnReleased.AddDynamic(this, &UUI_Hall::SwitchCharacterPage);
+	Setting->OnReleased.AddDynamic(this, &UUI_Hall::SwitchSettingPage);
+	LogOut->OnReleased.AddDynamic(this, &UUI_Hall::TryLogOut);
+	ExitGame->OnReleased.AddDynamic(this, &UUI_Hall::TryExitGame);
 	LoadPage->SetVisibility(ESlateVisibility::Hidden);
 
 	//循环绑定 指导成功为止
@@ -135,7 +139,7 @@ void UUI_Hall::LoginMsg(FString Mes)
 void UUI_Hall::OpenMenuPage()
 {
 	MenuPage->SetVisibility(ESlateVisibility::Visible);
-	GEngine->AddOnScreenDebugMessage(-1,4,FColor::Blue, "OpenMenuPage()");
+	//GEngine->AddOnScreenDebugMessage(-1,4,FColor::Blue, "OpenMenuPage()");
 }
 void UUI_Hall::CloseMenuPage()
 {
@@ -143,13 +147,13 @@ void UUI_Hall::CloseMenuPage()
 	
 
 	MenuPage->SetVisibility(ESlateVisibility::Hidden);
-	GEngine->AddOnScreenDebugMessage(-1,4,FColor::Blue, "CloseMenuPage()");
+	//GEngine->AddOnScreenDebugMessage(-1,4,FColor::Blue, "CloseMenuPage()");
 
 }
 void UUI_Hall::SwitchCreateRoomPage()
 {
 	MenuSwitcher->SetActiveWidgetIndex(0);
-	GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Blue, "SwitchCreateRoomPage()");
+	//GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Blue, "SwitchCreateRoomPage()");
 
 }
 void UUI_Hall::SwiichSerachRoomPage()
@@ -157,7 +161,7 @@ void UUI_Hall::SwiichSerachRoomPage()
 
 	//SEND_DATA_Hall(SP_FindRoom)
 	MenuSwitcher->SetActiveWidgetIndex(1);
-	GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Blue, "SwiichSerachRoomPage()");
+	//GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Blue, "SwiichSerachRoomPage()");
 
 }
 void UUI_Hall::TryCreateRoom()
@@ -180,6 +184,8 @@ void UUI_Hall::SerachCurrentRoom()
 }
 void UUI_Hall::JoinCurrentSelectedRoom(FString HandleRoomInfo)
 {
+	LoadPage->SetVisibility(ESlateVisibility::Visible);
+
 	FString RoomPort;
 
 	HandleRoomInfo.Split("/", &RoomPort, nullptr);
@@ -262,22 +268,38 @@ void UUI_Hall::SetInputRoomName(FText tt)
 void UUI_Hall::OnClickServerMapButton1()
 {
 	ServerMapName = "ZWB";
-	ResetButtonColor();
-	ServerMap1Buuton->SetBackgroundColor(FColor::FromHex("FFFFFFFF"));
+	//ResetButtonColor();
+	//ServerMap1Buuton->SetBackgroundColor(FColor::FromHex("FFFFFFFF"));
 }
 
 void UUI_Hall::OnClickServerMapButton2()
 {
 	ServerMapName = "ServerMap02";
-	ResetButtonColor();
-	ServerMap2Buuton->SetBackgroundColor(FColor::FromHex("FFFFFFFF"));
+	//ResetButtonColor();
+	//ServerMap2Buuton->SetBackgroundColor(FColor::FromHex("FFFFFFFF"));
 }
 
 void UUI_Hall::OnClickServerMapButton3()
 {
 	ServerMapName = "ServerMap03";
-	ResetButtonColor();
-	ServerMap3Buuton->SetBackgroundColor(FColor::FromHex("FFFFFFFF"));
+	//ResetButtonColor();
+	//ServerMap3Buuton->SetBackgroundColor(FColor::FromHex("FFFFFFFF"));
+}
+void UUI_Hall::SwitchCharacterPage()
+{
+	MenuSwitcher->SetActiveWidgetIndex(2);
+}
+void UUI_Hall::SwitchSettingPage()
+{
+	MenuSwitcher->SetActiveWidgetIndex(3);
+}
+void UUI_Hall::TryLogOut()
+{
+	UGameplayStatics::OpenLevel(GetWorld(), "ChatOnlineEnry");
+}
+void UUI_Hall::TryExitGame()
+{
+	GetWorld()->GetFirstPlayerController()->ConsoleCommand("QUIT");
 }
 
 void UUI_Hall::ResetButtonColor()
